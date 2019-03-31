@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body" style="padding: 30px 25px 30px 25px; text-align: center;">
                                     
-                Are you sure you want to End Document ( <b id="com_name"></b> ) ?
+                Are you sure you want to end the process of Document ( <b id="com_name"></b> ) ?
                                                
             </div>
             <div class="modal-footer">

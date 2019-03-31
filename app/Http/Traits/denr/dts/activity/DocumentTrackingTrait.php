@@ -72,7 +72,7 @@ trait DocumentTrackingTrait
         $documents = DocRecordModel::join('dts_document_types','dts_document_record.DOC_TYPE','=','dts_document_types.ID')
                                    ->whereIn('dts_document_record.DOC_NO', $valid_doc)
                                    ->where('dts_document_record.DOC_CATEGORY','=', $category)
-                                   ->where('dts_document_record.DOC_DATE', '>=', date('Y-m-01'))
+                                   ->where('dts_document_record.DOC_DATE', '>=', date('Y-01-01'))
                                    ->where('dts_document_record.DOC_DATE', '<=', date('Y-m-d'))
                                    ->orderBy('dts_document_record.DOC_DATE', 'DESC')
                                    ->orderBy('dts_document_record.DOC_NO', 'DESC')

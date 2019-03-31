@@ -76,12 +76,12 @@ $user_role = $user->user_role;
                                                     <font style="float: left; margin-top: 8px;"><i class="fa fa-pencil-square fa-fw"></i> DOCUMENT INFORMATION </font>
                                                     
                                                     <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i>  </a>
-                                                    
+
                                                     @if($documents->STATUS != 'C')
 
-                                                        @if($for_end->ACTION_TO_BE_TAKEN == '12')
+                                                        <!-- @if($for_end->ACTION_TO_BE_TAKEN == '12') -->
                                                         
-                                                            <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: #3D9140; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="glyphicon glyphicon-saved"></i> </a>
+                                                            <!-- <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: #3D9140; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="glyphicon glyphicon-saved"></i> </a>-->
                                                             
                                                             <!-- @if($documents->SIGNED == 'N')
                                                             
@@ -89,11 +89,13 @@ $user_role = $user->user_role;
                                                             
                                                             @endif --> 
 
-                                                        @else 
-                                                            
+                                                        <!-- @else -->
+
+                                                            <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: #3D9140; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="glyphicon glyphicon-saved"></i> </a>
+                                                             
                                                             <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="Forward" style="font-size: 12px; color: #09C; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="fa fa-send"></i> </a>
                                                         
-                                                        @endif
+                                                        <!-- @endif -->
 
                                                     @endif
                                                     

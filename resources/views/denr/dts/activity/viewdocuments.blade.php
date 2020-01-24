@@ -75,8 +75,9 @@ $user_role = $user->user_role;
                                                     
                                                     <font style="float: left; margin-top: 8px;"><i class="fa fa-pencil-square fa-fw"></i> DOCUMENT INFORMATION </font>
                                                     
-                                                    <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i>  </a>
-
+                                                    <a onClick=MM_openBrWindow("{{ url('dts/activity/document/manual/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Manual Slip" style="cursor:pointer; font-size: 12px; color: #FF4500; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i></a>
+                                                    <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i></a>
+                                                    
                                                     @if($documents->STATUS != 'C')
 
                                                         <!-- @if($for_end->ACTION_TO_BE_TAKEN == '12') -->
@@ -279,27 +280,17 @@ $user_role = $user->user_role;
 
                                             <table class="table table-striped table-bordered table-hover tooltip-demo">
 
-                                                
-
                                                 <tr style="background-color:#F0FFF0;">
-                                                    <td rowspan="2" style="width:4%; vertical-align: middle; font-size: 14px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;"><i class="fa fa-bell"></i></td>
-                                                    <!-- <td rowspan="2" style="width:4%; vertical-align: bottom; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: right;">No.</td> -->
-                                                    <td rowspan="2" style="width:14%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document From</td>
-                                                    <td rowspan="2" style="width:14%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document To</td>
-                                                    <td colspan="2" style="width:14%; vertical-align: middle;font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Document Received</td>
-                                                    <td colspan="2" style="width:14%; vertical-align: middle;font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document Released</td>
-                                                    <td rowspan="2" style="width:15%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document Runtime</td>
-                                                    <td rowspan="2" style="width:16%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be Taken / Remarks</td>
-                                                    <td rowspan="2" style="width:7%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Action</td>
+                                                    <td style="width:3%; vertical-align: middle; font-size: 14px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;"><i class="fa fa-bell"></i></td>
+                                                    <td style="width:12%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: left; padding-left: 15px;">Document From</td>
+                                                    <td style="width:12%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: left; padding-left: 15px;">Document To</td>
+                                                    <td style="width:7%; vertical-align: middle;font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Received</td>
+                                                    <td style="width:7%; vertical-align: middle;font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Released</td>
+                                                    <td style="width:10%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: left; padding-left: 15px;">Runtime</td>
+                                                    <td style="width:40%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: left; padding-left: 15px;">Action to be Taken / Remarks</td>
+                                                    <td style="width:7%; vertical-align: middle; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Action</td>
                                                 </tr>
-
-                                                <tr style="background-color:#F0FFF0;">
-                                                    <td style="width:8%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Date</td>
-                                                    <td style="width:6%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Time</td>
-                                                    <td style="width:8%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Date</td>
-                                                    <td style="width:6%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Time</td>
-                                                </tr>
-
+             
                                                 @foreach($history_logs as $id => $col)
 
                                                     @php
@@ -356,7 +347,7 @@ $user_role = $user->user_role;
 
 
 
-                                                        $new_datetime1 = new DateTime($col->REL_DATE_TIME);
+                                                        $new_datetime1 = new DateTime($col->SEEN_DATE_TIME);
                                                         $new_datetime2 = new DateTime(date('Y-m-d H:i:s'));
                                                         $new_interval = $new_datetime1->diff($new_datetime2);
 
@@ -441,10 +432,8 @@ $user_role = $user->user_role;
                                                                 <li>{{$col->to_fname}} {{$col->to_lname}}</li>
                                                             </ul>
                                                         </td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }}</td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }}</td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
+                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
+                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{ $time_consumed }}</td>
                                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{$col->ACTION}} {{$col->DOC_REMARKS}}</td>
                                                         
@@ -466,9 +455,23 @@ $user_role = $user->user_role;
 
                                                     @if($col->ACTION_STATUS == 0)
 
+                                                    @if($col->SEEN_DATE_TIME != NULL)
+                                                        @php
+                                                        $rec_date = date('m/d/Y', strtotime($col->SEEN_DATE_TIME));
+                                                        $rec_time = date('h:i A', strtotime($col->SEEN_DATE_TIME));
+                                                        $run_time = $new_time_consumed;
+                                                        @endphp
+                                                    @else
+                                                        @php
+                                                        $rec_date = '';
+                                                        $rec_time = '';
+                                                        $run_time = '';
+                                                        @endphp
+                                                    @endif
+
                                                     <tr class="log-history">
                                                         <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">
-                                                            <div style="width: 10px; height: 10px; border-radius:20px; background: #F00; margin: auto;" data-toggle="tooltip" data-placement="left" title="Unseen"></div> 
+                                                            <!-- <div style="width: 10px; height: 10px; border-radius:20px; background: #F00; margin: auto;" data-toggle="tooltip" data-placement="left" title="Unseen"></div>  -->
                                                         </td>
                                                         <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">
                                                             <ul style="padding-left: 20px; margin-bottom: 0px;">
@@ -476,11 +479,9 @@ $user_role = $user->user_role;
                                                             </ul>
                                                         </td>
                                                         <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }}</td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
+                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">{{$rec_date}}<br/>{{$rec_time}}</td>
                                                         <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>
-                                                        <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>
-                                                        <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{ $new_time_consumed }}</td>
+                                                        <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{$run_time}}</td>
                                                         <td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">Pending / No Action Taken</td>
                                                         <td style="text-align:left;padding:7px 7px 7px 7px; vertical-align: middle;"></td>
                                                     </tr>

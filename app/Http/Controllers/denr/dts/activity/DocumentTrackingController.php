@@ -82,6 +82,12 @@ class DocumentTrackingController extends Controller
         return $this->PrintDocumentSlipFunction($id);
         
     }
+
+    public function PrintManualSlip($id){
+
+        return $this->PrintManualSlipFunction($id);
+        
+    }
     
     public function AddDocuments()
     {

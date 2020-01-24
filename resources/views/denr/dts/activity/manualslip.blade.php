@@ -103,8 +103,7 @@
                                         <td style="width:10%; padding: 5px;vertical-align: middle;font-size: 12px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Received</td>
                                         <td style="width:10%; padding: 5px;vertical-align: middle;font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;"> Released</td>
                                         <td style="width:12%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Runtime</td>
-                                        <td style="width:30%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be taken / Remarks</td>
-                                        <td style="width:12%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Attachments</td>
+                                        <td style="width:42%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be taken / Remarks</td>
                                     </tr>
 
                                     @foreach($history_logs as $id => $col)
@@ -160,58 +159,6 @@
 
                                             $time_consumed = $con_days.' '.$con_hours.' '.$con_minutes;
 
-                                            $new_datetime1 = new DateTime($col->SEEN_DATE_TIME);
-                                            $new_datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                                            $new_interval = $new_datetime1->diff($new_datetime2);
-
-                                            $new_days = $new_interval->format('%d');
-                                            $new_hours = $new_interval->format('%h');
-                                            $new_minutes = $new_interval->format('%i');
-
-
-                                            if($new_days > 0) {
-                                                if($new_days > 1) {
-                                                    $new_con_days = $new_days.' days, ';
-                                                } else if($new_days == 1) {
-                                                    $new_con_days = $new_days.' day, ';
-                                                }
-                                            } else if($new_days == 0) {
-                                                $new_con_days = '';
-                                            }
-
-                                            if($new_hours > 0) {
-                                                if($new_hours > 1) {
-                                                    $new_con_hours = $new_hours.' hrs. ';
-                                                } else if($new_hours == 1) {
-                                                    $new_con_hours = $new_hours.' hr. ';
-                                                }
-                                            } else if($new_hours == 0) {
-                                                $new_con_hours = '';
-                                            }
-
-                                            if($new_minutes > 0) {
-                                                if($new_minutes > 1) {
-                                                    if($new_hours > 0) {
-                                                        $new_con_minutes = ' & '.$new_minutes.' mins. ';
-                                                    } else if($new_hours == 0) { 
-                                                        $new_con_minutes = $new_minutes.' mins. ';
-                                                    }
-                                                } else if($new_minutes == 1) {
-                                                    if($new_hours > 0) {
-                                                        $new_con_minutes = ' & '.$new_minutes.' min. ';
-                                                    } else if($new_hours == 0) { 
-                                                        $new_con_minutes = $new_minutes.' min. ';
-                                                    }
-                                                }
-                                            } else if($new_minutes == 0) {
-                                                $new_con_minutes = '';
-                                            }
-
-                                            $new_time_consumed = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
-
-
-                                            $log_attachment = DB::table('dts_document_attachments')->where('FW_NO', '=', $col->FW_NO)->where('DOC_NO', '=', $col->DOC_NO)->get();
-
                                         @endphp
 
                                         <tr class="log-history">
@@ -242,46 +189,16 @@
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{ $time_consumed }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$col->ACTION}} {{$col->DOC_REMARKS}}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"">
-                                                <ul style="padding: 0px 0px 0px 15px;">
-                                                @foreach($log_attachment as $id => $att)
-                                                    <li>{{ $att->FILE_ATTACHMENT }}</li>
-                                                @endforeach
-                                                </ul>
-                                            </td>
                                         </tr>
-
-                                        @if($col->ACTION_STATUS == 0)
-
-                                        @if($col->SEEN_DATE_TIME != NULL)
-                                            @php
-                                            $rec_date = date('m/d/Y', strtotime($col->SEEN_DATE_TIME));
-                                            $rec_time = date('h:i A', strtotime($col->SEEN_DATE_TIME));
-                                            $run_time = $new_time_consumed;
-                                            @endphp
-                                        @else
-                                            @php
-                                            $rec_date = '';
-                                            $rec_time = '';
-                                            $run_time = '';
-                                            @endphp
-                                        @endif
 
                                         <tr class="log-history">
-                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">
-                                                <ul style="padding-left: 20px; margin-bottom: 0px;">
-                                                    <li>{{$col->to_fname}} {{$col->to_lname}}</li>
-                                                </ul>
-                                            </td>
+                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px; height: 650px;"></td>
                                             <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{$rec_date}}<br/>{{$rec_time}}</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$run_time}}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">Pending / No Action Taken</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;"></td>
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;"></td>
                                         </tr>
-
-                                        @endif
 
                                     @endforeach
 

@@ -227,14 +227,32 @@ trait DocumentTrackingTrait
 
     }
 
+    public function checkSeenStatus($id)
+    {
+        $model = new DocLogsModel;
+        $data = $model->select('SEEN')->where('ID','=',$id)->first();
+        return $data['SEEN'];
+    }
+
+    public function viewSeenStatus($doc_no,$doc_to)
+    {
+        $model = new DocLogsModel;
+        $data = $model->select('SEEN')->where('DOC_NO','=',$doc_no)->where('DOC_TO','=',$doc_to)->first();
+        return $data['SEEN'];
+    }
+
 
     public function DownloadAttachmentFunction($id, $id2, $id3){
 
         if(Auth::user()->id == $id3) {
 
-            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-            DocLogsModel::where('ID', '=', $id2)->update($seen_log);
+            $checkStatus = $this->checkSeenStatus($id2);
 
+            if($checkStatus == 'N') {
+
+                $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+                DocLogsModel::where('ID', '=', $id2)->update($seen_log);
+            }
         }
 
         $filename = $id;
@@ -247,9 +265,13 @@ trait DocumentTrackingTrait
 
         if(Auth::user()->id == $id4) {
 
-            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-            DocLogsModel::where('ID', '=', $id2)->update($seen_log);
+            $checkStatus = $this->checkSeenStatus($id2);
 
+            if($checkStatus == 'N') {
+
+                $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+                DocLogsModel::where('ID', '=', $id2)->update($seen_log);
+            }
         }
 
         $attach = DocAttachmentsModel::where('ID', '=', $id)->first();
@@ -282,23 +304,33 @@ trait DocumentTrackingTrait
 
     }
 
-    public function SeenLogFunction(Request $request){
+    public function SeenLogFunction(Request $request) {
 
         $log_id = $request->log_id;
-        $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-        DocLogsModel::where('ID', '=', $log_id)->update($seen_log);
+        $checkStatus = $this->checkSeenStatus($log_id);
 
-        Session::flash('success', 'Marked as Seen.');
-        return back();
+        if($checkStatus == 'N') {
 
+            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+            DocLogsModel::where('ID', '=', $log_id)->update($seen_log);
+
+            Session::flash('success', 'Marked as Seen.');
+            return back();
+        }
     }
 
     public function ViewSeenLogFunction($doc_no){
 
-        $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-        DocLogsModel::where('DOC_TO', '=', Auth::user()->id)
-                    ->where('DOC_NO', '=', $doc_no)
-                    ->update($seen_log);
+        $doc_to = Auth::user()->id;
+        $checkStatus = $this->viewSeenStatus($doc_no,$doc_to);
+
+        if($checkStatus == 'N') {
+
+            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+            DocLogsModel::where('DOC_TO', '=', $doc_to)
+                        ->where('DOC_NO', '=', $doc_no)
+                        ->update($seen_log);
+        }
 
     }
 
@@ -332,6 +364,52 @@ trait DocumentTrackingTrait
                                        ->get();
 
         return view('denr.dts.activity.printslip')
+                ->with('documents', $document_details)
+                ->with('doc_type', $document_type)
+                ->with('doc_user', $document_user)
+                ->with('attachments', $document_attachments)
+                ->with('senders1', $document_senders1)
+                ->with('senders2', $document_senders2)
+                ->with('receivers', $document_receivers)
+                ->with('formno', $form)
+                ->with('new_no', $new_no)
+                ->with('cur_no', $cur_no)
+                ->with('id', $id)
+                ->with('history_logs', $document_logs);
+       
+    }
+
+    public function PrintManualSlipFunction($id) {
+
+        $user = Auth::user();
+        $doc_no = decrypt($id);
+        $document_details = DocRecordModel::where('DOC_NO', '=', $doc_no)->first();
+        $document_type = DocTypeModel::where('ID', '=', $document_details->DOC_TYPE)->first();
+        $document_user = UserModel::where('id', '=', $document_details->CREATED_BY)->first();
+        $document_attachments = DocAttachmentsModel::where('DOC_NO', '=', $doc_no)->where('ATTACH_CLASS', '=', 'RC')->get();
+        $document_senders1 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->first();
+        $document_senders2 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->get();
+        $document_receivers = DocReceiverModel::where('DOC_NO', '=', $doc_no)->get();
+
+        $return_to = DocLogsModel::where('DOC_NO', '=', $doc_no)->where('DOC_TO', '=', $user->id)->first();
+
+        $form = FormNoModel::where('id','=','2')->first();
+        $str = $form->form_no;
+        $no = strlen($str);
+        $new_no = str_pad($form->form_no+1, $no, "0", STR_PAD_LEFT);
+        $cur_no = str_pad($form->form_no, $no, "0", STR_PAD_LEFT);
+
+        $document_logs = DocRecordModel::select('dts_document_logs.*', 'dts_document_record.*' , 'dts_action_to_be_taken.ACTION', 'user_from.fname as from_fname', 'user_from.lname as from_lname', 'user_to.fname as to_fname', 'user_to.lname as to_lname')
+                                       ->leftJoin('dts_document_logs','dts_document_record.DOC_NO','=','dts_document_logs.DOC_NO')
+                                       ->join('users as user_from','dts_document_logs.DOC_FROM','=','user_from.id')
+                                       ->join('users as user_to','dts_document_logs.DOC_TO','=','user_to.id')
+                                       ->join('dts_action_to_be_taken','dts_document_logs.ACTION_TO_BE_TAKEN','=','dts_action_to_be_taken.ID')
+                                       ->where('dts_document_logs.DOC_NO','=', $doc_no)
+                                       ->orderBy('dts_document_logs.ID', 'ASC')
+                                       ->limit(1)
+                                       ->get();
+
+        return view('denr.dts.activity.manualslip')
                 ->with('documents', $document_details)
                 ->with('doc_type', $document_type)
                 ->with('doc_user', $document_user)
@@ -460,6 +538,9 @@ trait DocumentTrackingTrait
         $user = Auth::user();
         $doc_no = decrypt($id);
         $type = $id2;
+
+        $this->ViewSeenLogFunction($doc_no);
+        
         $document_details = DocRecordModel::where('DOC_NO', '=', $doc_no)->first();
         $document_attachments = DocAttachmentsModel::where('DOC_NO', '=', $doc_no)->where('ATTACH_CLASS', '=', 'RC')->get();
         $document_senders1 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->first();
@@ -486,7 +567,7 @@ trait DocumentTrackingTrait
 
         $for_end = DocLogsModel::where('DOC_NO','=', $doc_no)->orderBy('REL_DATE_TIME','DESC')->first();
 
-        $this->ViewSeenLogFunction($doc_no);
+        
         
         return view('denr.dts.activity.viewdocuments')
                 ->with('documents', $document_details)
@@ -566,11 +647,15 @@ trait DocumentTrackingTrait
         $doc_no = $request->input('doc_no');
         $doc_to = $request->input('doc_to');
 
+        //$attachments = DocAttachmentsModel::where('DOC_NO','=', $doc_no)
+                                          //->where('FW_NO','=', $fw_no)
+                                          //->orWhere('DOC_NO','=', $doc_no)
+                                          //->where('FW_NO','=', 1)
+                                          //->where('ATTACH_CLASS','=', 'RC')
+                                          //->get();
+        
         $attachments = DocAttachmentsModel::where('DOC_NO','=', $doc_no)
                                           ->where('FW_NO','=', $fw_no)
-                                          ->orWhere('DOC_NO','=', $doc_no)
-                                          ->where('FW_NO','=', 1)
-                                          ->where('ATTACH_CLASS','=', 'RC')
                                           ->get();
 
         $response['attachments'] = $attachments;

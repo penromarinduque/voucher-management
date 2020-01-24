@@ -94,21 +94,14 @@
                 {
 
                     $header = $('<tr style="background-color:#F0FFF0;">'
-                                    +'<td rowspan="2" style="width:4%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;"><i class="fa fa-bell"></i></td>'
-                                    /*+'<td rowspan="2" style="width:5%; font-size: 11px; vertical-align:bottom; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: right;">No.</td>'*/
-                                    +'<td rowspan="2" style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document From</td>'
-                                    +'<td rowspan="2" style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document To</td>'
-                                    +'<td colspan="2" style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Document Received</td>'
-                                    +'<td colspan="2" style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Document Released</td>'
-                                    +'<td rowspan="2" style="width:11%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Document Runtime</td>'
-                                    +'<td rowspan="2" style="width:16%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be Taken / Remarks</td>'
-                                    +'<td rowspan="2" style="width:7%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action</td>'
-                                +'</tr>'
-                                +'<tr style="background-color:#F0FFF0;">'
-                                    +'<td style="width:9%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Date</td>'
-                                    +'<td style="width:8%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Time</td>'
-                                    +'<td style="width:9%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Date</td>'
-                                    +'<td style="width:8%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Time</td>'
+                                    +'<td style="width:3%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold;  text-align: center;"><i class="fa fa-bell"></i></td>'
+                                    +'<td style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Document From</td>'
+                                    +'<td style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Document To</td>'
+                                    +'<td style="width:8%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Received</td>'
+                                    +'<td style="width:10%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Released</td>'
+                                    +'<td style="width:10%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Runtime</td>'
+                                    +'<td style="width:32%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Action to be Taken / Remarks</td>'
+                                    +'<td style="width:7%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action</td>'
                                 +'</tr>');
 
                     $('#log_header').html($header);
@@ -221,7 +214,7 @@
 
                         var new_date1, new_date2;  
 
-                        new_date1 = new Date(index.REL_DATE_TIME);
+                        new_date1 = new Date(index.SEEN_DATE_TIME);
                         new_date2 = new Date(<?php date('Y-m-d H:i:s'); ?>);
                         var new_res = Math.abs(new_date1 - new_date2) / 1000;
                         var new_days = Math.floor(new_res / 86400);       
@@ -280,6 +273,16 @@
 
                         }
 
+                        if(index.SEEN_DATE_TIME != null) {
+                            var rec_date = formatDate(index.SEEN_DATE_TIME);
+                            var rec_time = formatTime(index.SEEN_DATE_TIME);
+                            var run_time = new_time_consumed;
+                        } else {
+                            var rec_date = '';
+                            var rec_time = '';
+                            var run_time = '';
+                        }
+
 
                          
                         //////////////////////////////////////////
@@ -297,10 +300,8 @@
                                             +'<li>'+ index.to_fname +' '+ index.to_lname +'</li>'
                                         +'</ul>'
                                     +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REC_DATE_TIME) +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatTime(index.REC_DATE_TIME) +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REL_DATE_TIME) +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatTime(index.REL_DATE_TIME) +'</td>'
+                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REC_DATE_TIME) +'<br/>'+ formatTime(index.REC_DATE_TIME) +'</td>'
+                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REL_DATE_TIME) +'<br/>'+ formatTime(index.REL_DATE_TIME) +'</td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ time_consumed +'</td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ index.ACTION +' '+ doc_remarks +'</td>'
                                     +'<td style="padding: 0px; text-align: center; vertical-align: middle;">'
@@ -313,7 +314,7 @@
                                  +'</tr>'
                                  +'<tr class="log-history" style="background-color:#FFF;'+ action_status +'">'
                                     +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'
-                                        +'<div style="width: 10px; height: 10px; border-radius:20px; background:#F00; margin: auto;" data-toggle="tooltip" data-placement="left" title="Unseen"></div>'
+                                        //+'<div style="width: 10px; height: 10px; border-radius:20px; background:#F00; margin: auto;" data-toggle="tooltip" data-placement="left" title="Unseen"></div>'
                                     +'</td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'
                                         +'<ul style="padding-left: 20px; margin-bottom: 0px;">'
@@ -321,11 +322,9 @@
                                         +'</ul>'
                                     +'</td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REL_DATE_TIME) +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatTime(index.REL_DATE_TIME) +'</td>'
+                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ rec_date +'<br/>'+ rec_time +'</td>'
                                     +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">'+ new_time_consumed +'</td>'
+                                    +'<td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">'+ run_time +'</td>'
                                     +'<td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">Pending / No Action Taken</td>'
                                     +'<td style="padding: 0px; text-align: center; vertical-align: middle;"></td>'
                                  +'</tr>');

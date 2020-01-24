@@ -23,8 +23,8 @@
                     $title = 'Unseen'; 
                 }
             } else if($my_log  == 0) {
-                $bg = '#F00';
-                $title = 'Unseen'; 
+                $bg = 'transparent';
+                $title = '';
             }
                                                                 
         @endphp
@@ -49,16 +49,17 @@
             <td style="font-size: 11px; color: #5B5B5B; text-align: left; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{$record->REMARKS}}</td>
             <td style="font-size: 11px; color: #5B5B5B; text-align: left; ">{{ $encoded->fname }} {{ $encoded->lname }}</td>
             <td style="font-size: 11px; color: #5B5B5B; text-align: left; vertical-align: middle; padding: 0px;" >
-                <a href='{{url("/dts/activity/document/view/".$code."/A")}}' class="btn btn-default" data-toggle="tooltip" data-placement="top" title="View Document" style="font-size: 12px; color: green; border-radius: 2px; width: 25%; float: left; "><i class="fa fa-edit"></i></a>
-                <a href="javascript:void(0)" class="btn-history btn btn-default" data-id="{{$record->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="History Logs" style="font-size: 12px; color: #F00; border-radius: 2px; width: 25%; float: left;"><i class="fa fa-history"></i></a>
+                <a href='{{url("/dts/activity/document/view/".$code."/A")}}' class="btn btn-default" data-toggle="tooltip" data-placement="top" title="View Document" style="font-size: 12px; color: green; border-radius: 2px; width: 20%; float: left; "><i class="fa fa-edit"></i></a>
+                <a href="javascript:void(0)" class="btn-history btn btn-default" data-id="{{$record->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="History Logs" style="font-size: 12px; color: #F00; border-radius: 2px; width: 20%; float: left;"><i class="fa fa-history"></i></a>
                 @if($record->STATUS != 'C')
                     @if($for_end->ACTION_TO_BE_TAKEN == '12')
-                    <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$record->DOC_NO}}" data-id2="{{$record->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: green; border-radius: 2px; width: 25%; float: left; "><i class="glyphicon glyphicon-saved"></i></a>
+                    <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$record->DOC_NO}}" data-id2="{{$record->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: green; border-radius: 2px; width: 20%; float: left; "><i class="glyphicon glyphicon-saved"></i></a>
                     @else
-                    <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$record->DOC_NO}}" data-id2="{{$record->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="Forward" style="font-size: 12px; color: #09C; border-radius: 2px; width: 25%; float: left; "><i class="fa fa-send"></i></a>
+                    <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$record->DOC_NO}}" data-id2="{{$record->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="Forward" style="font-size: 12px; color: #09C; border-radius: 2px; width: 20%; float: left; "><i class="fa fa-send"></i></a>
                     @endif
                 @endif
-                <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$record->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 25%; float: left;"><i class="glyphicon glyphicon-print"></i></a>
+                <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$record->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 20%; float: left;"><i class="glyphicon glyphicon-print"></i></a>
+                <a onClick=MM_openBrWindow("{{ url('dts/activity/document/manual/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$record->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Manual Slip" style="cursor:pointer; font-size: 12px; color: #FF4500; border-radius: 2px; width: 20%; float: left;"><i class="glyphicon glyphicon-print"></i></a>
             </td>
         </tr>
 

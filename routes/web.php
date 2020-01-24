@@ -477,6 +477,9 @@ Route::group(['middleware' => 'auth'],function() {
 	//VIEW PRINT DOCUMENT SLIP
 	Route::get('/dts/activity/document/print/{id}', 'denr\dts\activity\DocumentTrackingController@PrintDocumentSlip')->name('print.document.slip');
 
+	//VIEW PRINT DOCUMENT SLIP
+	Route::get('/dts/activity/document/manual/{id}', 'denr\dts\activity\DocumentTrackingController@PrintManualSlip')->name('print.manual.slip');
+
 	//POST COMPLETE DOCUMENT
 	Route::post('/dts/activity/document/complete', 'denr\dts\activity\DocumentTrackingController@DocumentComplete')->name('post.complete.document');
 	

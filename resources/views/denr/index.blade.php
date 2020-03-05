@@ -41,7 +41,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12" style="font-size: 40px;">
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-language"></i>
                             </div>
                         </div>
                         <div class="row">
@@ -97,7 +97,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12" style="font-size: 40px;">
-                                <i class="fa fa-truck"></i>
+                                <i class="fa fa-file-text-o"></i>
                             </div>
                         </div>
                         <div class="row">
@@ -116,7 +116,7 @@
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #AB82FF; border-radius: 0px;  margin: 0px;">
-                <a href="{{ route('lms') }}" >
+                <a href="#" >
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
@@ -148,7 +148,7 @@
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #DB7093; border-radius: 0px;  margin: 0px;">
-                <a href="{{ route('fsa') }}" >
+                <a href="#" >
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
@@ -157,7 +157,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12" style="font-size: 40px;">
-                                <i class="fa fa-th"></i>
+                                <i class="fa fa-navicon"></i>
                             </div>
                         </div>
                         <div class="row">
@@ -185,12 +185,36 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12" style="font-size: 40px;">
-                                <i class="fa fa-cog"></i>
+                                <i class="fa fa-laptop"></i>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div style=" font-size: 14px;">Application Manager</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3" style="padding:10px;">
+            <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #9BCD9B; border-radius: 0px; margin: 0px; ">
+                <a href="#" >
+                    <div class="panel-heading" style="color: #FFF; text-align: left;">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style=" font-size: 20px;">BRM</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12" style="font-size: 40px;">
+                                <i class="fa fa-undo"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style=" font-size: 14px;">Backup & Recovery Manager</div>
                             </div>
                         </div>
                     </div>

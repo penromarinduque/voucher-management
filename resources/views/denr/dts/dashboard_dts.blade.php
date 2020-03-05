@@ -123,7 +123,7 @@
     @if($dts_access3 > 0)
 
         <div class="col-lg-3" style="padding:10px;">
-            <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #DB7093; border-radius: 0px;  margin: 0px;">
+            <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #CD5C5C; border-radius: 0px;  margin: 0px;">
                 <a href="{{ route('doc.type.list') }}" >
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">

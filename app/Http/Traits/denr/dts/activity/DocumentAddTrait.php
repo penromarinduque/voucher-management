@@ -3,7 +3,6 @@
 namespace App\Http\Traits\denr\dts\activity;
 
 use Auth;
-
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -23,10 +22,8 @@ use App\Models\denr\Form_No as FormNoModel;
 
 trait DocumentAddTrait
 {
-
 	public function viewTheForwardFunction(Request $request)
 	{
-
 		$doc_to =  $request->doc_to; 
 		$doc_action =  $request->doc_action; 
 		$doc_no = $request->doc_no;
@@ -55,16 +52,11 @@ trait DocumentAddTrait
 			];
 
 			DocLogsModel::insert($document_log);
-
 		}
 
-
-		//UPDATE ACTION STATUS
 		$doc_action = ['ACTION_STATUS' => 1];
 		DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
 
-
-		//HANDLES FILE ATTACHMENTS
 		if($request->hasFile('attached_files')){
 
 			$FILE_ATTACHMENTS = $request->attached_files;
@@ -75,9 +67,7 @@ trait DocumentAddTrait
 				$DESCRIPTION = $FILE->getClientOriginalName();
 				$SIZE = $FILE->getClientSize();
 				$FILE_NAME = rand(11111111, 99999999). '.' . $EXTENSION;
-
 				$FILE->move('DTS_UPLOADS/', $FILE_NAME);
-
 				echo $FILE_NAME.' '.$FILE->getClientSize().'<br>';
 
 				$FILE_RECORD = [
@@ -91,16 +81,10 @@ trait DocumentAddTrait
 
 				DocAttachmentsModel::insert($FILE_RECORD);
 			}
-
 		}
 
-		$document_rec_stat_update = [
-				
-			'STATUS' => 'F',
-		];
-
+		$document_rec_stat_update = ['STATUS' => 'F'];
 		DocRecordModel::where('DOC_NO', '=', $doc_no)->update($document_rec_stat_update);
-
 		return back();
 	}
 
@@ -123,11 +107,9 @@ trait DocumentAddTrait
 		$doc_urgent = $request->doc_urgent;
 		$doc_remarks = $request->doc_remarks;
 		$doc_processor = $user->id;
-
 		$doc_to =  $request->doc_to; 
 		$doc_action = $request->doc_action;
 		$send_type = $request->send_type;
-
 		$count_doc = DocRecordModel::where('DOC_NO','=', $doc_no)->count();
 
 		$DocumentRecord = [
@@ -149,13 +131,9 @@ trait DocumentAddTrait
 		];
 
 		if($count_doc == 0) {
-
 			DocRecordModel::insert($DocumentRecord);
-
 		} else if($count_doc > 0) {
-
 			DocRecordModel::where('DOC_NO','=', $doc_no)->update($DocumentRecord);
-
 		}
 
 		$data = [];
@@ -166,7 +144,6 @@ trait DocumentAddTrait
 						  				  ->where('DOC_SENDER','=', $sender)
 						  				  ->count();
 			if($sender != '') {
-
 				$sender_info = [
 					'DOC_NO' => $doc_no,
 					'DOC_SENDER' => $sender,
@@ -174,11 +151,8 @@ trait DocumentAddTrait
 				];
 
 				if($count_sender == 0) {
-
 					DocSenderModel::insert($sender_info);
-
 				} else if($count_sender > 0) {
-
 					DocSenderModel::where('DOC_NO','=', $doc_no)
 								  ->where('DOC_SENDER','=', $sender)
 								  ->update($sender_info);
@@ -210,10 +184,8 @@ trait DocumentAddTrait
 			];
 
 			DocLogsModel::insert($document_log);
-
 		}
 
-		//HANDLES FILE ATTACHMENTS
 		if($request->hasFile('attached_files')){
 
 			$FILE_ATTACHMENTS = $request->attached_files;
@@ -224,9 +196,7 @@ trait DocumentAddTrait
 				$DESCRIPTION = $FILE->getClientOriginalName();
 				$SIZE = $FILE->getClientSize();
 				$FILE_NAME = rand(11111111, 99999999). '.' . $EXTENSION;
-
 				$FILE->move('DTS_UPLOADS/', $FILE_NAME);
-
 				echo $FILE_NAME.' '.$FILE->getClientSize().'<br>';
 
 				$FILE_RECORD = [
@@ -240,28 +210,19 @@ trait DocumentAddTrait
 
 				DocAttachmentsModel::insert($FILE_RECORD);
 			}
-
 		}
 
 		$formid = $request->input('formid');
-
         $form_no = [
-
             'form_no' => $request->input('neworder_no'),
             'updated_by' => $user->id
-                        
         ];
 
         if($count_doc == 0) {
-
         	FormNoModel::where('id', '=', $formid)->update($form_no); 
-
     	}
 
 		Session::flash('success', 'Document ('.$doc_no.') successfully saved.');
-		
 		return back();
-
 	}
-
 }

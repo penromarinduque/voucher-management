@@ -28,198 +28,140 @@ class DocumentTrackingController extends Controller
     public function Documents($id)
     {
         if($this->user_access()){
-
             return $this->DocumentsFunction($id);
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
-    /*public function OutgoingDocuments()
+    public function documentPage(Request $request)
     {
-        if($this->user_access()){
+        return $this->toDocumentPage($request);
+    }
 
-            return $this->OutgoingDocumentsFunction();
+    public function documentSearch(Request $request)
+    {
+        return $this->toDocumentSearch($request);
+    }
 
-        } else {
-
-            Session::flash('failed', 'You have no rights to access '.$this->window_desc());
-            return back();
-
-        }
-    }*/
-
-    public function FilterDocuments(Request $request){
-
+    public function FilterDocuments(Request $request)
+    {
         return $this->FilterDocumentsFunction($request);
-        
     }
 
-    public function DownloadAttachment($id, $id2, $id3){
-
+    public function DownloadAttachment($id, $id2, $id3)
+    {
         return $this->DownloadAttachmentFunction($id, $id2, $id3);
-        
     }
 
-    public function PreviewAttachment($id, $id2, $id3, $id4){
-
+    public function PreviewAttachment($id, $id2, $id3, $id4)
+    {
         return $this->PreviewAttachmentFunction($id, $id2, $id3, $id4);
-        
     }
 
-    public function SeenLog(Request $request){
-
+    public function SeenLog(Request $request)
+    {
         return $this->SeenLogFunction($request);
-        
     }
 
-    public function PrintDocumentSlip($id){
-
+    public function PrintDocumentSlip($id)
+    {
         return $this->PrintDocumentSlipFunction($id);
-        
     }
 
-    public function PrintManualSlip($id){
-
+    public function PrintManualSlip($id)
+    {
         return $this->PrintManualSlipFunction($id);
-        
     }
     
     public function AddDocuments()
     {
         if($this->user_access()){
-
             return $this->AddDocumentsFunction();
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
     public function ForwardedDocuments()
     {
         if($this->user_access()){
-
             return $this->ForwardedDocumentsFunction();
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
     public function ReceivedDocuments()
     {
         if($this->user_access()){
-
             return $this->ReceivedDocumentsFunction();
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
-    public function AddDocumentsPost(Request $request){
-
+    public function AddDocumentsPost(Request $request)
+    {
         if($this->user_access()){
-
             return $this->AddDocumentFunction($request);
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
-    public function viewTheForward(Request $request){
-
+    public function viewTheForward(Request $request)
+    {
         if($this->user_access()){
-
             return $this->viewTheForwardFunction($request);
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
-    public function ajaxDocNo(Request $request){
-      
+    public function ajaxDocNo(Request $request)
+    {
         return $this->ajaxDocNoFunction($request);
-
     }
 
-    public function ViewDocuments($id, $id2){
-
+    public function ViewDocuments($id, $id2)
+    {
         if($this->user_access()){
-
             return $this->ViewDocumentsFunction($id, $id2);
-
         } else {
-
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
-
         }
     }
 
-    /*public function HistoryLogsDocument($id){
-
-        if($this->user_access()){
-
-            return $this->ViewHistoryLogsDocumentFunction($id);
-
-        } else {
-
-            Session::flash('failed', 'You have no rights to access '.$this->window_desc());
-            return back();
-
-        }
-    }*/
-
-    public function HistoryLogsAjax(Request $request){
-
+    public function HistoryLogsAjax(Request $request)
+    {
         return $this->AjaxHistoryLogsDocumentFunction($request);
-        
     }
 
-    public function AttachmentAjax(Request $request){
-
+    public function AttachmentAjax(Request $request)
+    {
         return $this->AjaxAttachmentFunction($request);
     }
 
-    public function LogAttachmentAjax(Request $request){
-
+    public function LogAttachmentAjax(Request $request)
+    {
         return $this->LogAttachmentAjaxFunction($request);
     }
 
-
-    public function DocumentComplete(Request $request){
-
+    public function DocumentComplete(Request $request)
+    {
         return $this->DocumentCompleteFunction($request);
-
     }
 
-    public function DocumentSign(Request $request){
-            
+    public function DocumentSign(Request $request)
+    {
         return $this->DocumentSignFunction($request);
-
     }
-    
 }

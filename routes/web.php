@@ -486,6 +486,12 @@ Route::group(['middleware' => 'auth'],function() {
 	//POST SIGN DOCUMENT
 	Route::post('/dts/activity/document/sign', 'denr\dts\activity\DocumentTrackingController@DocumentSign')->name('post.sign.document');
 	
+	//PAGE
+    Route::get('/dts/activity/document/page', 'denr\dts\activity\DocumentTrackingController@documentPage')->name('page.documents');
+
+    //SEARCH
+    Route::get('/dts/activity/document/search', 'denr\dts\activity\DocumentTrackingController@documentSearch')->name('search.documents');
+
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//
 	//  DTS - MAINTENANCE

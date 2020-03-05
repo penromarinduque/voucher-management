@@ -185,7 +185,7 @@
                                                     <li>{{$col->to_fname}} {{$col->to_lname}}</li>
                                                 </ul>
                                             </td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
+                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->SEEN_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->SEEN_DATE_TIME)) }}</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{ $time_consumed }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$col->ACTION}} {{$col->DOC_REMARKS}}</td>

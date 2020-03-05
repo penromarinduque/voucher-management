@@ -128,7 +128,7 @@ trait UserAccessTraits
       $module = ModuleModel::where('module_path','=', $this->current_module())->first();
 
       $access = UserModuleAccessModel::where('user','=',$user->id)
-                                     ->where('module_code','=', $module->module_code)
+                                     ->where('module_code','=', $module['module_code'])
                                      ->where('module_access','=', '1')
                                      ->count();
 

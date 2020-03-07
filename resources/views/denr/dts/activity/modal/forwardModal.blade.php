@@ -77,5 +77,4 @@
     </div>
 </div>
 
-@include('denr.dts.activity.script.jScriptForward')
 

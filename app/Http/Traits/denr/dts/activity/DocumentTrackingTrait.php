@@ -170,7 +170,7 @@ trait DocumentTrackingTrait
     public function viewSeenStatus($doc_no,$doc_to)
     {
         $model = new DocLogsModel;
-        $data = $model->select('SEEN')->where('DOC_NO','=',$doc_no)->where('DOC_TO','=',$doc_to)->first();
+        $data = $model->select('SEEN')->where('DOC_NO','=',$doc_no)->where('DOC_TO','=',$doc_to)->orderBy('DOC_DT_LOG','DESC')->first();
         return $data['SEEN'];
     }
 
@@ -512,24 +512,22 @@ trait DocumentTrackingTrait
         $user = Auth::user();
         $com_id = $request->input('com_id');
         $doc_cat = $request->input('doc_cat');
+        $remarks = $request->input('end_remarks');
         $date2day = date('Y-m-d');
         $encode = Crypt::encrypt($com_id);
-
-        $complete = ['STATUS' => 'C', 'COMPLETED_BY' => $user->id, 'DATE_COMPLETED' => date('Y-m-d H:i:s')];
-        DocRecordModel::where('DOC_NO', '=', $com_id)->update($complete);
 
         $forward = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('FW_NO', 'DESC')->first();
         $released = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('ID', 'DESC')->first();
 
         $document_log = [
             'FW_NO' => $forward->FW_NO + 1,
-            'DOC_FROM' => $released->DOC_FROM,
-            'DOC_TO' => $released->DOC_TO,
+            'DOC_FROM' => $forward->DOC_TO,
+            'DOC_TO' => $forward->DOC_TO,
             'DOC_NO' => $com_id,
             'DOC_DT_LOG' => date('Y-m-d H:i:s'),
-            'REC_DATE_TIME' => $released->REL_DATE_TIME,
+            'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
             'REL_DATE_TIME' => date('Y-m-d H:i:s'),
-            'DOC_REMARKS' => 'Released/Completed',
+            'DOC_REMARKS' => $remarks,
             'DOC_CATEGORY' => $doc_cat,
             'ACTION_TO_BE_TAKEN' => 14,
             'ACTION_STATUS' => 1,
@@ -542,6 +540,9 @@ trait DocumentTrackingTrait
 
         $doc_action = ['ACTION_STATUS' => 1];
         DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
+
+        $complete = ['STATUS' => 'C', 'COMPLETED_BY' => $user->id, 'DATE_COMPLETED' => date('Y-m-d H:i:s')];
+        DocRecordModel::where('DOC_NO', '=', $com_id)->update($complete);
                     
         $window_page = 'Document';
         $module_code = 'DTS';

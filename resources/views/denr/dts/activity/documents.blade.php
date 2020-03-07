@@ -95,6 +95,7 @@ $user_role = $user->user_role;
 
 <!-- SCRIPTS -->
 
+
 @include('denr.dts.activity.script.jScriptFilterPage')
 @include('denr.dts.activity.script.jScriptSearchDocument')
 @include('denr.dts.activity.script.jScriptDateTimeFormat')

@@ -3,26 +3,19 @@
 	$(document).ready(function() {
 
         $('.btn-history').on('click', function() {
-                                    
             $('#history_modal').modal('show');
-
             var doc_no = $(this).attr('data-id');
-
             $(".modal-header #history_title").html(doc_no);
-
             $('.log-history').remove();
 
             $.ajax ({
-
                 type: "GET",
                 url: "{{ route('ajax.history.logs') }}",
                 dataType:'JSON',
                 success:'success',
                 data: { doc_no : doc_no },
                 success: function(data)
-        
                 {
-
                     $header = $('<tr style="background-color:#F0FFF0;">'
                                     +'<td style="width:3%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold;  text-align: center;"><i class="fa fa-bell"></i></td>'
                                     +'<td style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Document From</td>'
@@ -41,53 +34,26 @@
                         var no = i+1;
 
                         if(index.SEEN == 'Y') { 
-
                             var seen = 'Yes'; 
                             var bg = '#00CD00'; 
                             var title = 'Seen';
 
                         } else if(index.SEEN == 'N') { 
-
                             var seen = 'No';
                             var bg = '#F00'; 
                             var title = 'Unseen'; 
                         }
 
                         if(index.DOC_TO == <?php echo $user->id ?>) {
+                            if(index.SEEN == 'N') { var form_stat = 'inline'; } 
+                            else if(index.SEEN == 'Y') { var form_stat = 'none'; }
+                        } else { var form_stat = 'none'; }
 
-                            if(index.SEEN == 'N') { 
+                        if(index.FW_NO == 1) { var sender_class = 'sender_1'; } 
+                        else if(index.FW_NO > 1) { var sender_class = 'sender_'+ no; }
 
-                                var form_stat = 'inline';  
-
-                            } else if(index.SEEN == 'Y') {
-
-                                var form_stat = 'none';
-
-                            }
-
-                        } else { 
-
-                            var form_stat = 'none'; 
-                        }
-
-                        if(index.FW_NO == 1) {
-
-                            var sender_class = 'sender_1';
-
-                        } else if(index.FW_NO > 1) {
-
-                            var sender_class = 'sender_'+ no;
-                        }
-
-                        if(index.ACTION_STATUS == 0) {
-
-                            var action_status = '';
-
-                        } else if(index.ACTION_STATUS == 1) {
-
-                            var action_status = 'display:none;';
-                        }
-
+                        if(index.ACTION_STATUS == 0) { var action_status = ''; } 
+                        else if(index.ACTION_STATUS == 1) { var action_status = 'display:none;'; }
 
                         var date1, date2;  
 
@@ -100,47 +66,28 @@
                         var seconds = res % 60;
 
                         if(days > 0) {
-                            if(days > 1) {
-                                var con_days = days + ' days, ';
-                            } else if(days == 1) {
-                                var con_days = days + ' day, ';
-                            }
-                        } else if(days == 0) {
-                            var con_days = '';
-                        }
+                            if(days > 1) { var con_days = days + ' days, '; } 
+                            else if(days == 1) { var con_days = days + ' day, '; }
+                        } else if(days == 0) { var con_days = ''; }
 
                         if(hours > 0) {
-                            if(hours > 1) {
-                                var con_hours = hours + ' hrs. ';
-                            } else if(hours == 1) {
-                                var con_hours = hours + ' hr. ';
-                            }
-                        } else if(hours == 0) {
-                            var con_hours = '';
-                        }
+                            if(hours > 1) { var con_hours = hours + ' hrs. '; } 
+                            else if(hours == 1) { var con_hours = hours + ' hr. '; }
+                        } else if(hours == 0) { var con_hours = ''; }
 
                         if(minutes > 0) {
                             if(minutes > 1) {
-                                if(hours > 0) {
-                                    var con_minutes = ' & ' + minutes + ' mins. ';
-                                } else if(hours == 0) { 
-                                    var con_minutes = minutes + ' mins. ';
-                                }
+                                if(hours > 0) { var con_minutes = ' & ' + minutes + ' mins. '; } 
+                                else if(hours == 0) { var con_minutes = minutes + ' mins. '; }
                             } else if(minutes == 1) {
-                                if(hours > 0) {
-                                    var con_minutes = ' & ' + minutes + ' min. ';
-                                } else if(hours == 0) { 
-                                    var con_minutes = minutes + ' min. ';
-                                }
+                                if(hours > 0) { var con_minutes = ' & ' + minutes + ' min. '; } 
+                                else if(hours == 0) { var con_minutes = minutes + ' min. '; }
                             }
-                        } else if(minutes == 0) {
-                            var con_minutes = '';
-                        }
+                        } else if(minutes == 0) { var con_minutes = ''; }
 
                         var time_consumed = con_days + '' + con_hours + '' + con_minutes;
 
-
-
+                        ///////////////////////////////////////////////////////////////////////
 
                         var new_date1, new_date2;  
 
@@ -153,55 +100,29 @@
                         var new_seconds = new_res % 60;
 
                         if(new_days > 0) {
-                            if(new_days > 1) {
-                                var new_con_days = new_days + ' days, ';
-                            } else if(new_days == 1) {
-                                var new_con_days = new_days + ' day, ';
-                            }
-                        } else if(new_days == 0) {
-                            var new_con_days = '';
-                        }
+                            if(new_days > 1) { var new_con_days = new_days + ' days, '; } 
+                            else if(new_days == 1) { var new_con_days = new_days + ' day, '; }
+                        } else if(new_days == 0) { var new_con_days = ''; }
 
                         if(new_hours > 0) {
-                            if(new_hours > 1) {
-                                var new_con_hours = new_hours + ' hrs. ';
-                            } else if(new_hours == 1) {
-                                var new_con_hours = new_hours + ' hr. ';
-                            }
-                        } else if(new_hours == 0) {
-                            var new_con_hours = '';
-                        }
+                            if(new_hours > 1) { var new_con_hours = new_hours + ' hrs. '; } 
+                            else if(new_hours == 1) { var new_con_hours = new_hours + ' hr. '; }
+                        } else if(new_hours == 0) { var new_con_hours = ''; }
 
                         if(new_minutes > 0) {
                             if(new_minutes > 1) {
-                                if(new_hours > 0) {
-                                    var new_con_minutes = ' & ' + new_minutes + ' mins. ';
-                                } else if(new_hours == 0) { 
-                                    var new_con_minutes = new_minutes + ' mins. ';
-                                }
+                                if(new_hours > 0) { var new_con_minutes = ' & ' + new_minutes + ' mins. '; } 
+                                else if(new_hours == 0) { var new_con_minutes = new_minutes + ' mins. '; }
                             } else if(new_minutes == 1) {
-                                if(new_hours > 0) {
-                                    var new_con_minutes = ' & ' + new_minutes + ' min. ';
-                                } else if(new_hours == 0) { 
-                                    var new_con_minutes = new_minutes + ' min. ';
-                                }
+                                if(new_hours > 0) { var new_con_minutes = ' & ' + new_minutes + ' min. '; } 
+                                else if(new_hours == 0) { var new_con_minutes = new_minutes + ' min. '; }
                             }
-                        } else if(new_minutes == 0) {
-                            var new_con_minutes = '';
-                        }
+                        } else if(new_minutes == 0) { var new_con_minutes = ''; }
 
                         var new_time_consumed = new_con_days + '' + new_con_hours + '' + new_con_minutes;
 
-
-                        if(index.DOC_REMARKS != null) {
-
-                            var doc_remarks = index.DOC_REMARKS;
-
-                        } else {
-
-                            var doc_remarks = '';
-
-                        }
+                        if(index.DOC_REMARKS != null) { var doc_remarks = index.DOC_REMARKS; } 
+                        else { var doc_remarks = ''; }
 
                         if(index.SEEN_DATE_TIME != null) {
                             var rec_date = formatDate(index.SEEN_DATE_TIME);
@@ -213,8 +134,12 @@
                             var run_time = '';
                         }
 
+                        if(index.ACTION == 13) {
+                            var new_action = '';
+                        } else {
+                            var new_action = index.ACTION;
+                        }
 
-                         
                         //////////////////////////////////////////
 
                         $row = $('<tr class="log-history" style="background-color:#FFF;">'
@@ -230,10 +155,10 @@
                                             +'<li>'+ index.to_fname +' '+ index.to_lname +'</li>'
                                         +'</ul>'
                                     +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.SEEN_DATE_TIME) +'<br/>'+ formatTime(index.SEEN_DATE_TIME) +'</td>'
+                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REC_DATE_TIME) +'<br/>'+ formatTime(index.REC_DATE_TIME) +'</td>'
                                     +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ formatDate(index.REL_DATE_TIME) +'<br/>'+ formatTime(index.REL_DATE_TIME) +'</td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ time_consumed +'</td>'
-                                    +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ index.ACTION +' '+ doc_remarks +'</td>'
+                                    +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ new_action +' '+ doc_remarks +'</td>'
                                     +'<td style="padding: 0px; text-align: center; vertical-align: middle;">'
                                         +'<a href="javascript:void(0)" class="btn-log-attachment btn btn-default" data-id="'+ index.ID +'" data-id2="'+ index.FW_NO +'" data-id3="'+ index.DOC_NO +'" data-id4="'+ index.DOC_TO +'" data-toggle="tooltip" data-placement="top" title="Attachments" style="font-size: 12px; color: #09C; border-radius: 2px; width: 50%; float: left; "><i class="glyphicon glyphicon-paperclip"></i></a>'
                                         +'{{Form::open(array("action"=>"denr\dts\activity\DocumentTrackingController@SeenLog"))}}'
@@ -243,9 +168,7 @@
                                     +'</td>'
                                  +'</tr>'
                                  +'<tr class="log-history" style="background-color:#FFF;'+ action_status +'">'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'
-                                        //+'<div style="width: 10px; height: 10px; border-radius:20px; background:#F00; margin: auto;" data-toggle="tooltip" data-placement="left" title="Unseen"></div>'
-                                    +'</td>'
+                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
                                     +'<td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'
                                         +'<ul style="padding-left: 20px; margin-bottom: 0px;">'
                                             +'<li>'+ index.to_fname +' '+ index.to_lname +'</li>'
@@ -262,28 +185,20 @@
                         $('#log_content').append($row);
 
                         if(index.FW_NO > 1) {
-
                             $('.sender_'+ no).html('<li>'+ index.from_fname +' '+ index.from_lname +'</li>');
-
                         }
-                
                     });
 
 
                     $.each(data.doc_sender, function(i,index2) {
 
                         if(index2.SENDER_TYPE == 'IN') {
-
                             $row = $('<li>'+ index2.fname +' '+ index2.lname +'</li>');
-
                         } else if(index2.SENDER_TYPE == 'OUT') {
-
                             $row = $('<li>'+ index2.fname +'</li>');
-
                         }
 
                         $('.sender_1').append($row);
-
                     });
 
 
@@ -297,20 +212,16 @@
                         var doc_to = $(this).attr('data-id4');
 
                         $(".modal-header #attach_title").html(doc_no);
-
                         $('.attach-files').remove();
 
                         $.ajax ({
-
                             type: "GET",
                             url: "{{ route('ajax.log.attachment') }}",
                             dataType:'JSON',
                             success:'success',
                             data: { log_id : log_id, forward_no : forward_no, doc_no : doc_no, doc_to : doc_to, },
                             success: function(data)
-                    
                             {
-
                                 $header = $('<tr style="background-color:#FFF;">'
                                                 +'<td style="width:5%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: right;">No.</td>'
                                                 +'<td style="width:20%; font-size: 11px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: left;">Attachment</td>'
@@ -424,19 +335,12 @@
                                     $('#attach_content').append($row);
                             
                                 });
-               
                             }
-                                    
                         });
-                                                                    
                     });
-   
                 }
-         
             });
-                                                        
         });
-
     });
 
 </script>

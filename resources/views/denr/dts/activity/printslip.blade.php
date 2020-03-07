@@ -74,7 +74,7 @@
                                                 </ul>
                                             </font>
                                         </td>
-                                        <td style="vertical-align: top;"> Date & Time Received: &nbsp; <font style="font-weight: bold; width: 300px;">{{ date('m/d/Y', strtotime($documents['DOC_DATE'])) }} {{ date('H:i A', strtotime($documents['DOC_TIME'])) }}</font></td>
+                                        <td style="vertical-align: top;"> Date & Time Received: &nbsp; <font style="font-weight: bold; width: 300px;">{{ date('m/d/Y', strtotime($documents['DOC_DATE'])) }} {{ date('h:i A', strtotime($documents['DOC_TIME'])) }}</font></td>
                                     </tr>
                                     <tr>
                                         <td> Originating Office: &nbsp; <font style="font-weight: bold; width: 300px;">{{ $documents['ORIGIN_OFFICE'] }}</font></td>
@@ -119,97 +119,27 @@
                                             $hours = $interval->format('%h');
                                             $minutes = $interval->format('%i');
 
-
                                             if($days > 0) {
-                                                if($days > 1) {
-                                                    $con_days = $days.' days, ';
-                                                } else if($days == 1) {
-                                                    $con_days = $days.' day, ';
-                                                }
-                                            } else if($days == 0) {
-                                                $con_days = '';
-                                            }
+                                                if($days > 1) { $con_days = $days.' days, '; } 
+                                                else if($days == 1) { $con_days = $days.' day, '; }
+                                            } else if($days == 0) { $con_days = ''; }
 
                                             if($hours > 0) {
-                                                if($hours > 1) {
-                                                    $con_hours = $hours.' hrs. ';
-                                                } else if($hours == 1) {
-                                                    $con_hours = $hours.' hr. ';
-                                                }
-                                            } else if($hours == 0) {
-                                                $con_hours = '';
-                                            }
+                                                if($hours > 1) { $con_hours = $hours.' hrs. '; } 
+                                                else if($hours == 1) { $con_hours = $hours.' hr. '; }
+                                            } else if($hours == 0) { $con_hours = ''; }
 
                                             if($minutes > 0) {
                                                 if($minutes > 1) {
-                                                    if($hours > 0) {
-                                                        $con_minutes = ' & '.$minutes.' mins. ';
-                                                    } else if($hours == 0) { 
-                                                        $con_minutes = $minutes.' mins. ';
-                                                    }
+                                                    if($hours > 0) { $con_minutes = ' & '.$minutes.' mins. '; } 
+                                                    else if($hours == 0) { $con_minutes = $minutes.' mins. '; }
                                                 } else if($minutes == 1) {
-                                                    if($hours > 0) {
-                                                        $con_minutes = ' & '.$minutes.' min. ';
-                                                    } else if($hours == 0) { 
-                                                        $con_minutes = $minutes.' min. ';
-                                                    }
+                                                    if($hours > 0) { $con_minutes = ' & '.$minutes.' min. '; } 
+                                                    else if($hours == 0) { $con_minutes = $minutes.' min. '; }
                                                 }
-                                            } else if($minutes == 0) {
-                                                $con_minutes = '';
-                                            }
-
+                                            } else if($minutes == 0) { $con_minutes = ''; }
+                                            
                                             $time_consumed = $con_days.' '.$con_hours.' '.$con_minutes;
-
-                                            $new_datetime1 = new DateTime($col->SEEN_DATE_TIME);
-                                            $new_datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                                            $new_interval = $new_datetime1->diff($new_datetime2);
-
-                                            $new_days = $new_interval->format('%d');
-                                            $new_hours = $new_interval->format('%h');
-                                            $new_minutes = $new_interval->format('%i');
-
-
-                                            if($new_days > 0) {
-                                                if($new_days > 1) {
-                                                    $new_con_days = $new_days.' days, ';
-                                                } else if($new_days == 1) {
-                                                    $new_con_days = $new_days.' day, ';
-                                                }
-                                            } else if($new_days == 0) {
-                                                $new_con_days = '';
-                                            }
-
-                                            if($new_hours > 0) {
-                                                if($new_hours > 1) {
-                                                    $new_con_hours = $new_hours.' hrs. ';
-                                                } else if($new_hours == 1) {
-                                                    $new_con_hours = $new_hours.' hr. ';
-                                                }
-                                            } else if($new_hours == 0) {
-                                                $new_con_hours = '';
-                                            }
-
-                                            if($new_minutes > 0) {
-                                                if($new_minutes > 1) {
-                                                    if($new_hours > 0) {
-                                                        $new_con_minutes = ' & '.$new_minutes.' mins. ';
-                                                    } else if($new_hours == 0) { 
-                                                        $new_con_minutes = $new_minutes.' mins. ';
-                                                    }
-                                                } else if($new_minutes == 1) {
-                                                    if($new_hours > 0) {
-                                                        $new_con_minutes = ' & '.$new_minutes.' min. ';
-                                                    } else if($new_hours == 0) { 
-                                                        $new_con_minutes = $new_minutes.' min. ';
-                                                    }
-                                                }
-                                            } else if($new_minutes == 0) {
-                                                $new_con_minutes = '';
-                                            }
-
-                                            $new_time_consumed = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
-
-
                                             $log_attachment = DB::table('dts_document_attachments')->where('FW_NO', '=', $col->FW_NO)->where('DOC_NO', '=', $col->DOC_NO)->get();
 
                                         @endphp
@@ -238,10 +168,10 @@
                                                     <li>{{$col->to_fname}} {{$col->to_lname}}</li>
                                                 </ul>
                                             </td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->SEEN_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->SEEN_DATE_TIME)) }}</td>
+                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{ $time_consumed }}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$col->ACTION}} {{$col->DOC_REMARKS}}</td>
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">@if($col->ACTION != 13){{$col->ACTION}}@endif {{$col->DOC_REMARKS}}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"">
                                                 <ul style="padding: 0px 0px 0px 15px;">
                                                 @foreach($log_attachment as $id => $att)
@@ -253,33 +183,66 @@
 
                                         @if($col->ACTION_STATUS == 0)
 
-                                        @if($col->SEEN_DATE_TIME != NULL)
                                             @php
-                                            $rec_date = date('m/d/Y', strtotime($col->SEEN_DATE_TIME));
-                                            $rec_time = date('h:i A', strtotime($col->SEEN_DATE_TIME));
-                                            $run_time = $new_time_consumed;
-                                            @endphp
-                                        @else
-                                            @php
-                                            $rec_date = '';
-                                            $rec_time = '';
-                                            $run_time = '';
-                                            @endphp
-                                        @endif
 
-                                        <tr class="log-history">
-                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">
-                                                <ul style="padding-left: 20px; margin-bottom: 0px;">
-                                                    <li>{{$col->to_fname}} {{$col->to_lname}}</li>
-                                                </ul>
-                                            </td>
-                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{$rec_date}}<br/>{{$rec_time}}</td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$run_time}}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">Pending / No Action Taken</td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                        </tr>
+                                                $new_datetime1 = new DateTime($col->SEEN_DATE_TIME);
+                                                $new_datetime2 = new DateTime(date('Y-m-d H:i:s'));
+                                                $new_interval = $new_datetime1->diff($new_datetime2);
+
+                                                $new_days = $new_interval->format('%d');
+                                                $new_hours = $new_interval->format('%h');
+                                                $new_minutes = $new_interval->format('%i');
+
+                                                if($new_days > 0) {
+                                                    if($new_days > 1) { $new_con_days = $new_days.' days, '; } 
+                                                    else if($new_days == 1) { $new_con_days = $new_days.' day, '; }
+                                                } else if($new_days == 0) { $new_con_days = ''; }
+
+                                                if($new_hours > 0) {
+                                                    if($new_hours > 1) { $new_con_hours = $new_hours.' hrs. '; } 
+                                                    else if($new_hours == 1) { $new_con_hours = $new_hours.' hr. '; }
+                                                } else if($new_hours == 0) { $new_con_hours = ''; }
+
+                                                if($new_minutes > 0) {
+                                                    if($new_minutes > 1) {
+                                                        if($new_hours > 0) { $new_con_minutes = ' & '.$new_minutes.' mins. '; } 
+                                                        else if($new_hours == 0) { $new_con_minutes = $new_minutes.' mins. '; }
+                                                    } else if($new_minutes == 1) {
+                                                        if($new_hours > 0) { $new_con_minutes = ' & '.$new_minutes.' min. '; } 
+                                                        else if($new_hours == 0) { $new_con_minutes = $new_minutes.' min. '; }
+                                                    }
+                                                } else if($new_minutes == 0) { $new_con_minutes = ''; }
+                                                $new_time_consumed = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
+                                            
+                                            @endph
+
+                                            @if($col->SEEN_DATE_TIME != NULL)
+                                                @php
+                                                $rec_date = date('m/d/Y', strtotime($col->SEEN_DATE_TIME));
+                                                $rec_time = date('h:i A', strtotime($col->SEEN_DATE_TIME));
+                                                $run_time = $new_time_consumed;
+                                                @endphp
+                                            @else
+                                                @php
+                                                $rec_date = '';
+                                                $rec_time = '';
+                                                $run_time = '';
+                                                @endphp
+                                            @endif
+
+                                            <tr class="log-history">
+                                                <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">
+                                                    <ul style="padding-left: 20px; margin-bottom: 0px;">
+                                                        <li>{{$col->to_fname}} {{$col->to_lname}}</li>
+                                                    </ul>
+                                                </td>
+                                                <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{$rec_date}}<br/>{{$rec_time}}</td>
+                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$run_time}}</td>
+                                                <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">Pending / No Action Taken</td>
+                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
+                                            </tr>
 
                                         @endif
 

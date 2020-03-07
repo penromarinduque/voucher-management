@@ -42,7 +42,7 @@ trait DocumentAddTrait
 				'DOC_TO' => $request->input('doc_to')[$index],
 				'DOC_NO' => $doc_no,
 				'DOC_DT_LOG' => date('Y-m-d H:i:s'),
-				'REC_DATE_TIME' => $released->REL_DATE_TIME,
+				'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
 				'REL_DATE_TIME' => date('Y-m-d H:i:s'),
 				'DOC_REMARKS' => $doc_remarks,
 				'DOC_CATEGORY' => $doc_cat,

@@ -74,7 +74,7 @@
                                                 </ul>
                                             </font>
                                         </td>
-                                        <td style="vertical-align: top;"> Date & Time Received: &nbsp; <font style="font-weight: bold; width: 300px;">{{ date('m/d/Y', strtotime($documents['DOC_DATE'])) }} {{ date('H:i A', strtotime($documents['DOC_TIME'])) }}</font></td>
+                                        <td style="vertical-align: top;"> Date & Time Received: &nbsp; <font style="font-weight: bold; width: 300px;">{{ date('m/d/Y', strtotime($documents['DOC_DATE'])) }} {{ date('h:i A', strtotime($documents['DOC_TIME'])) }}</font></td>
                                     </tr>
                                     <tr>
                                         <td> Originating Office: &nbsp; <font style="font-weight: bold; width: 300px;">{{ $documents['ORIGIN_OFFICE'] }}</font></td>
@@ -118,45 +118,26 @@
                                             $hours = $interval->format('%h');
                                             $minutes = $interval->format('%i');
 
-
                                             if($days > 0) {
-                                                if($days > 1) {
-                                                    $con_days = $days.' days, ';
-                                                } else if($days == 1) {
-                                                    $con_days = $days.' day, ';
-                                                }
-                                            } else if($days == 0) {
-                                                $con_days = '';
-                                            }
+                                                if($days > 1) { $con_days = $days.' days, '; } 
+                                                else if($days == 1) { $con_days = $days.' day, '; }
+                                            } else if($days == 0) { $con_days = ''; }
 
                                             if($hours > 0) {
-                                                if($hours > 1) {
-                                                    $con_hours = $hours.' hrs. ';
-                                                } else if($hours == 1) {
-                                                    $con_hours = $hours.' hr. ';
-                                                }
-                                            } else if($hours == 0) {
-                                                $con_hours = '';
-                                            }
+                                                if($hours > 1) { $con_hours = $hours.' hrs. '; } 
+                                                else if($hours == 1) { $con_hours = $hours.' hr. '; }
+                                            } else if($hours == 0) { $con_hours = ''; }
 
                                             if($minutes > 0) {
                                                 if($minutes > 1) {
-                                                    if($hours > 0) {
-                                                        $con_minutes = ' & '.$minutes.' mins. ';
-                                                    } else if($hours == 0) { 
-                                                        $con_minutes = $minutes.' mins. ';
-                                                    }
+                                                    if($hours > 0) { $con_minutes = ' & '.$minutes.' mins. '; } 
+                                                    else if($hours == 0) { $con_minutes = $minutes.' mins. '; }
                                                 } else if($minutes == 1) {
-                                                    if($hours > 0) {
-                                                        $con_minutes = ' & '.$minutes.' min. ';
-                                                    } else if($hours == 0) { 
-                                                        $con_minutes = $minutes.' min. ';
-                                                    }
+                                                    if($hours > 0) { $con_minutes = ' & '.$minutes.' min. '; } 
+                                                    else if($hours == 0) { $con_minutes = $minutes.' min. '; }
                                                 }
-                                            } else if($minutes == 0) {
-                                                $con_minutes = '';
-                                            }
-
+                                            } else if($minutes == 0) { $con_minutes = ''; }
+                                            
                                             $time_consumed = $con_days.' '.$con_hours.' '.$con_minutes;
 
                                         @endphp
@@ -185,10 +166,10 @@
                                                     <li>{{$col->to_fname}} {{$col->to_lname}}</li>
                                                 </ul>
                                             </td>
-                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->SEEN_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->SEEN_DATE_TIME)) }}</td>
+                                            <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{ $time_consumed }}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$col->ACTION}} {{$col->DOC_REMARKS}}</td>
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">@if($col->ACTION != 13){{$col->ACTION}}@endif {{$col->DOC_REMARKS}}</td>
                                         </tr>
 
                                         <tr class="log-history">

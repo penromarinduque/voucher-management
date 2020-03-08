@@ -71,7 +71,7 @@
                         @if($dts_access1 > 0)
 
                             <li>
-                                <a href="{{ route('view.documents', ['id' => 'in']) }}">
+                                <a href="{{ route('dts.document.index', ['id' => 'in']) }}">
                                     <i class="fa fa-sign-in fa-fw"></i> Incoming Document 
                                     @if($in_notification > 0)
                                     <div style="width: 17px; height: 17px; background-color: #F00; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('view.documents', ['id' => 'out']) }}">
+                                <a href="{{ route('dts.document.index', ['id' => 'out']) }}">
                                     <i class="fa fa-sign-out fa-fw"></i> Outgoing Document
                                     @if($out_notification > 0)
                                     <div style="width: 17px; height: 17px; background-color: #F00; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
@@ -97,7 +97,7 @@
                             
                             @if($user_role != '4')
                                 <li>
-                                    <a href="{{ route('add.documents') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
                                 </li>
                             @endif
 

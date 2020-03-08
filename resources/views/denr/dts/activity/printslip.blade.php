@@ -214,7 +214,7 @@
                                                 } else if($new_minutes == 0) { $new_con_minutes = ''; }
                                                 $new_time_consumed = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
                                             
-                                            @endph
+                                            @endphp
 
                                             @if($col->SEEN_DATE_TIME != NULL)
                                                 @php

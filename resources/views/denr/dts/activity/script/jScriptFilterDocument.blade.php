@@ -31,7 +31,7 @@
 
         $.ajax ({
             type: "GET",
-            url: "{{ route('filter.documents') }}",
+            url: "{{ route('dts.document.filter') }}",
             data: dataString,
             cache: false,
             success: function(html) {

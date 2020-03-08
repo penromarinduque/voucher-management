@@ -8,7 +8,6 @@ $user = Auth::user();
 $user_type = $user->user_type;
 $user_role = $user->user_role;
 
-
 ?>
 
 @extends('denr.layouts.app')
@@ -35,18 +34,16 @@ $user_role = $user->user_role;
                         <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                             <li style="margin-left: 12px;">
-                                <a href="{{ route('view.documents', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
+                                <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
                             </li>
 
                             <li>
-                                <a href="{{ route('view.documents', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
+                                <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
                             </li>
                             
                             <li class="active">
-                                <a href="{{ route('add.documents') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                                <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
                             </li>
-
-                            
 
                         </ul>
 
@@ -70,7 +67,7 @@ $user_role = $user->user_role;
                                         </table>
                                     </div>
 
-                                    {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@AddDocumentsPost', 'files'=>'true', 'name'=>'form' ))}}
+                                    {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@insert', 'files'=>'true', 'name'=>'form' ))}}
 
                                         <div class="panel panel-default">
 

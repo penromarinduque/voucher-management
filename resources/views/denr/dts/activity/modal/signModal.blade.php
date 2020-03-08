@@ -9,7 +9,7 @@
                 Are you sure you want to sign Document ( <b id="com_name"></b> ) ?
             </div>
             <div class="modal-footer">
-                {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@DocumentSign'))}}
+                {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@sign'))}}
                     <input type="hidden" id="com_id" name="com_id" value="" />
                     <button type="button" class="btn btn-danger" data-dismiss="modal" style='width:50px; height:30px; padding:2px 2px 2px 2px; float:right; margin-left:10px;'>No</button>
                     <input type='submit' name='sign' value='Yes' class='btn btn-success' style='width:50px; height:30px; padding:2px 2px 2px 2px; float:right;'/>                            

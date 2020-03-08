@@ -2,7 +2,7 @@
     <div class="modal-dialog" id="mod_id" style="margin-top: 50px; width: 50%;">
         <div class="modal-content">
 
-            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@viewTheForward', 'files'=>'true', 'name'=>'form' ))}}
+            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@forward', 'files'=>'true', 'name'=>'form' ))}}
                 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>

@@ -33,23 +33,23 @@ $user_role = $user->user_role;
             <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                 <li style="margin-left: 12px;">
-                    <a href="{{ route('view.documents', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
                 </li>
 
                 <li>
-                    <a href="{{ route('view.documents', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
                 </li>
 
                 @if($user_role != '4')
                 
                 <li>
-                    <a href="{{ route('add.documents') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
                 </li>
 
                 @endif
 
                 <li class="active">
-                    <a href="{{ route('view.edit.documents', ['id' => $id, 'id2' => 'B']) }}"><i class="fa fa-edit fa-fw"></i> View Document</a>
+                    <a href="{{ route('dts.document.view', ['id' => $id, 'id2' => 'B']) }}"><i class="fa fa-edit fa-fw"></i> View Document</a>
                 </li>
 
             </ul>
@@ -81,7 +81,9 @@ $user_role = $user->user_role;
                                         <a onClick=MM_openBrWindow("{{ url('dts/activity/document/print/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Slip" style="cursor:pointer; font-size: 12px; color: gold; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i></a>
                                         
                                         @if($documents->STATUS != 'C')
+                                            @if($end_user != $user->id)
                                             <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="End" style="font-size: 12px; color: #3D9140; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="glyphicon glyphicon-saved"></i> </a>
+                                            @endif
                                             <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-toggle="tooltip" data-placement="top" title="Forward" style="font-size: 12px; color: #09C; border-radius: 2px; width: 37px; float: right; margin-left: 2px; "><i class="fa fa-send"></i> </a>
                                         @endif
                                         

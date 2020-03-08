@@ -56,7 +56,21 @@ trait UserAccessTraits
       $window = WindowModel::where('window_name','=', $this->current_window())->first();
       $subwindow = $this->current_subwindow();
 
-      if($subwindow == 'add') {
+      if($subwindow == 'index') {
+
+          $access = UserAccessModel::where('user','=',$user->id)
+                                   ->where('window_id','=', $window->window_id)
+                                   ->where('view_access','=', '1')
+                                   ->count();
+
+      } else if($subwindow == 'create') {
+
+          $access = UserAccessModel::where('user','=',$user->id)
+                                   ->where('window_id','=', $window->window_id)
+                                   ->where('add_access','=', '1')
+                                   ->count();
+
+      } else if($subwindow == 'insert') {
 
           $access = UserAccessModel::where('user','=',$user->id)
                                    ->where('window_id','=', $window->window_id)
@@ -68,6 +82,20 @@ trait UserAccessTraits
           $access = UserAccessModel::where('user','=',$user->id)
                                    ->where('window_id','=', $window->window_id)
                                    ->where('view_access','=', '1')
+                                   ->count();
+
+      } else if($subwindow == 'forward') {
+
+          $access = UserAccessModel::where('user','=',$user->id)
+                                   ->where('window_id','=', $window->window_id)
+                                   ->where('add_access','=', '1')
+                                   ->count();
+
+      } else if($subwindow == 'add') {
+
+          $access = UserAccessModel::where('user','=',$user->id)
+                                   ->where('window_id','=', $window->window_id)
+                                   ->where('add_access','=', '1')
                                    ->count();
 
       } else if($subwindow == 'edit') {

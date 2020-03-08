@@ -1,7 +1,7 @@
 <div id="complete_modal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="margin-top: 100px; width: 450px;">
         <div class="modal-content">
-            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@DocumentComplete'))}}
+            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@complete'))}}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" style="color: #3D9140;"><i class="fa fa-check-circle"></i> End Confirmation</h4>

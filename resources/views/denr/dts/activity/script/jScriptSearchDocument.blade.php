@@ -21,7 +21,7 @@
 
         $.ajax ({
             type: "GET",
-            url: "{{ route('search.documents') }}",
+            url: "{{ route('dts.document.search') }}",
             data: dataString,
             cache: false,
             success: function(html) {

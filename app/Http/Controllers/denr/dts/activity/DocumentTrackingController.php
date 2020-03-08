@@ -8,136 +8,112 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-use App\Models\denr\Travel_Order as TravelOrdeModel;
-use App\Models\denr\Employee_Position as PositionModel;
-use App\Models\denr\Employee_Division as DivisionModel;
-use App\Models\denr\Employee_Section as SectionModel;
-use App\Models\denr\Employee_Unit as UnitModel;
-use App\Models\denr\User as UserModel;
-use App\Models\denr\Form_Signatory as FormSignatoryModel;
-
 use App\Http\Traits\denr\dts\activity\DocumentTrackingTrait;
-use App\Http\Traits\denr\dts\activity\DocumentAddTrait;
 use App\Http\Traits\denr\dts\activity\ReleasedDcoumentsTrait;
 use App\Http\Traits\denr\app\UserAccessTraits;
 
 class DocumentTrackingController extends Controller
 {
-	use DocumentTrackingTrait, DocumentAddTrait, UserAccessTraits;
+	use DocumentTrackingTrait, UserAccessTraits;
 
-    public function Documents($id)
+    public function index($id)
     {
         if($this->user_access()){
-            return $this->DocumentsFunction($id);
+            return $this->toIndex($id);
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
         }
     }
 
-    public function documentPage(Request $request)
+    public function page(Request $request)
     {
-        return $this->toDocumentPage($request);
+        return $this->toPage($request);
     }
 
-    public function documentSearch(Request $request)
+    public function search(Request $request)
     {
-        return $this->toDocumentSearch($request);
+        return $this->toSearch($request);
     }
 
-    public function FilterDocuments(Request $request)
+    public function filter(Request $request)
     {
-        return $this->FilterDocumentsFunction($request);
+        return $this->toFilter($request);
     }
 
-    public function DownloadAttachment($id, $id2, $id3)
-    {
-        return $this->DownloadAttachmentFunction($id, $id2, $id3);
-    }
-
-    public function PreviewAttachment($id, $id2, $id3, $id4)
-    {
-        return $this->PreviewAttachmentFunction($id, $id2, $id3, $id4);
-    }
-
-    public function SeenLog(Request $request)
-    {
-        return $this->SeenLogFunction($request);
-    }
-
-    public function PrintDocumentSlip($id)
-    {
-        return $this->PrintDocumentSlipFunction($id);
-    }
-
-    public function PrintManualSlip($id)
-    {
-        return $this->PrintManualSlipFunction($id);
-    }
-    
-    public function AddDocuments()
+    public function create()
     {
         if($this->user_access()){
-            return $this->AddDocumentsFunction();
+            return $this->toCreate();
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
         }
     }
 
-    public function ForwardedDocuments()
+    public function insert(Request $request)
     {
         if($this->user_access()){
-            return $this->ForwardedDocumentsFunction();
+            return $this->toInsert($request);
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
         }
     }
 
-    public function ReceivedDocuments()
+    public function view($id, $id2)
     {
         if($this->user_access()){
-            return $this->ReceivedDocumentsFunction();
+            return $this->toView($id, $id2);
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
         }
     }
 
-    public function AddDocumentsPost(Request $request)
+    public function forward(Request $request)
     {
         if($this->user_access()){
-            return $this->AddDocumentFunction($request);
+            return $this->toForward($request);
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();
         }
     }
 
-    public function viewTheForward(Request $request)
+    public function complete(Request $request)
     {
-        if($this->user_access()){
-            return $this->viewTheForwardFunction($request);
-        } else {
-            Session::flash('failed', 'You have no rights to access '.$this->window_desc());
-            return back();
-        }
+        return $this->toComplete($request);
+    }
+
+    public function seen(Request $request)
+    {
+        return $this->toSeen($request);
+    }
+
+    public function download($id, $id2, $id3)
+    {
+        return $this->toDownload($id, $id2, $id3);
+    }
+
+    public function preview($id, $id2, $id3, $id4)
+    {
+        return $this->toPreview($id, $id2, $id3, $id4);
+    }
+
+    public function printSlip($id)
+    {
+        return $this->toPrintSlip($id);
+    }
+
+    public function printManual($id)
+    {
+        return $this->toPrintManual($id);
     }
 
     public function ajaxDocNo(Request $request)
     {
         return $this->ajaxDocNoFunction($request);
-    }
-
-    public function ViewDocuments($id, $id2)
-    {
-        if($this->user_access()){
-            return $this->ViewDocumentsFunction($id, $id2);
-        } else {
-            Session::flash('failed', 'You have no rights to access '.$this->window_desc());
-            return back();
-        }
     }
 
     public function HistoryLogsAjax(Request $request)
@@ -155,13 +131,8 @@ class DocumentTrackingController extends Controller
         return $this->LogAttachmentAjaxFunction($request);
     }
 
-    public function DocumentComplete(Request $request)
+    public function sign(Request $request)
     {
-        return $this->DocumentCompleteFunction($request);
-    }
-
-    public function DocumentSign(Request $request)
-    {
-        return $this->DocumentSignFunction($request);
+        return $this->toSign($request);
     }
 }

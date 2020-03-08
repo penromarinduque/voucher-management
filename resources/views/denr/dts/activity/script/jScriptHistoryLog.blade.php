@@ -161,7 +161,7 @@
                                     +'<td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">'+ new_action +' '+ doc_remarks +'</td>'
                                     +'<td style="padding: 0px; text-align: center; vertical-align: middle;">'
                                         +'<a href="javascript:void(0)" class="btn-log-attachment btn btn-default" data-id="'+ index.ID +'" data-id2="'+ index.FW_NO +'" data-id3="'+ index.DOC_NO +'" data-id4="'+ index.DOC_TO +'" data-toggle="tooltip" data-placement="top" title="Attachments" style="font-size: 12px; color: #09C; border-radius: 2px; width: 50%; float: left; "><i class="glyphicon glyphicon-paperclip"></i></a>'
-                                        +'{{Form::open(array("action"=>"denr\dts\activity\DocumentTrackingController@SeenLog"))}}'
+                                        +'{{Form::open(array("action"=>"denr\dts\activity\DocumentTrackingController@seen"))}}'
                                             +'<input type="hidden" name="log_id" value="'+ index.ID +'">'
                                             +'<button type="submit" class="btn btn-default" data-id="" data-toggle="tooltip" data-placement="top" title="Seen?" style="font-size: 12px; color: green; border-radius: 2px; width: 50%; float: left; display:'+ form_stat +';"><i class="fa fa-check"></i></button>'
                                         +'{{Form::close()}}'

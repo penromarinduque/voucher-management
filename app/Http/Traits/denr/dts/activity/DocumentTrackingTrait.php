@@ -15,16 +15,18 @@ use App\Models\denr\Employee_Position as PositionModel;
 use App\Models\denr\Employee_Division as DivisionModel;
 use App\Models\denr\Employee_Section as SectionModel;
 use App\Models\denr\Employee_Unit as UnitModel;
+
 use App\Models\denr\DTS_DocTypesModel as DocTypeModel;
-use App\Models\denr\User as UserModel;
-use App\Models\denr\Form_Signatory as FormSignatoryModel;
-use App\Models\denr\Form_No as FormNoModel;
 use App\Models\denr\DTS_DocRecordModel as DocRecordModel;
 use App\Models\denr\DTS_DocReceiverModel as DocReceiverModel;
 use App\Models\denr\DTS_DocSenderModel as DocSenderModel;
 use App\Models\denr\DTS_DocLogsModel as DocLogsModel;
 use App\Models\denr\DTS_DocAttachmentsModel as DocAttachmentsModel;
 use App\Models\denr\DTS_DocActionModel as DocActionModel;
+
+use App\Models\denr\User as UserModel;
+use App\Models\denr\Form_Signatory as FormSignatoryModel;
+use App\Models\denr\Form_No as FormNoModel;
 
 trait DocumentTrackingTrait
 {
@@ -70,7 +72,7 @@ trait DocumentTrackingTrait
         return $cat_desc;
     }
 
-    public function DocumentsFunction($id){
+    public function toIndex($id){
 
         $category = strtoupper($id);
         $valid_doc = $this->getDocNo($category);
@@ -80,7 +82,7 @@ trait DocumentTrackingTrait
         return view('denr.dts.activity.documents', compact(['valid_doc','documents','doc_count','cat_desc','category']));
     }
 
-    public function toDocumentPage($request)
+    public function toPage($request)
     {
         $id = $request->input('category');
         $category = strtoupper($id);
@@ -90,42 +92,7 @@ trait DocumentTrackingTrait
         return view('denr.dts.activity.documentPage', compact(['documents','doc_count']));
     }
 
-    public function FilterDocumentsFunction(){
-
-        $doc_cat = Input::get('doc_cat');
-        $doc_from = Input::get('doc_from');
-        $doc_to = Input::get('doc_to');
-        $doc_type = Input::get('doc_type');
-        $doc_class = Input::get('doc_class');
-        $doc_urgent = Input::get('doc_urgent');
-        $doc_status = Input::get('doc_status');
-        $doc_signed = Input::get('doc_signed');
-
-        $valid_doc = $this->getDocNo($doc_cat);
-
-        $query = DocRecordModel::query();
-        $query = $query->join('dts_document_types','dts_document_record.DOC_TYPE','=','dts_document_types.ID');
-        $query = $query->whereIn('dts_document_record.DOC_NO', $valid_doc);
-
-        if (Input::has('doc_from')) { $query = $query->where('dts_document_record.DOC_DATE', '>=', $doc_from); }
-        if (Input::has('doc_to')) { $query = $query->where('dts_document_record.DOC_DATE', '<=', $doc_to); }
-        if (Input::has('doc_type')) { $query = $query->where('dts_document_record.DOC_TYPE', '=', $doc_type); }
-        if (Input::has('doc_class')) { $query = $query->where('dts_document_record.DOC_CLASSIFICATION', '=', $doc_class); }
-        if (Input::has('doc_urgent')) { $query = $query->where('dts_document_record.DOC_URGENT', '=', $doc_urgent); }
-        if (Input::has('doc_signed')) { $query = $query->where('dts_document_record.SIGNED', '=', $doc_signed); }
-        if (Input::has('doc_status')) { $query = $query->where('dts_document_record.STATUS', '=', $doc_status); }
-
-        $query = $query->where('dts_document_record.DOC_CATEGORY', '=', $doc_cat);
-        $documents = $query->orderBy('dts_document_record.DOC_DATE', 'DESC')
-                           ->orderBy('dts_document_record.DOC_NO', 'DESC')
-                           ->paginate(50);
-
-        $doc_count = count($documents);
-        return view('denr.dts.activity.documentPageFilter', compact(['documents','doc_count']));
-
-    }
-
-    public function toDocumentSearch(){
+    public function toSearch(){
 
         $doc_cat = Input::get('doc_cat');
         $search_doc = Input::get('search_doc');
@@ -160,11 +127,256 @@ trait DocumentTrackingTrait
 
     }
 
-    public function checkSeenStatus($id)
+    public function toFilter(){
+
+        $doc_cat = Input::get('doc_cat');
+        $doc_from = Input::get('doc_from');
+        $doc_to = Input::get('doc_to');
+        $doc_type = Input::get('doc_type');
+        $doc_class = Input::get('doc_class');
+        $doc_urgent = Input::get('doc_urgent');
+        $doc_status = Input::get('doc_status');
+        $doc_signed = Input::get('doc_signed');
+
+        $valid_doc = $this->getDocNo($doc_cat);
+
+        $query = DocRecordModel::query();
+        $query = $query->join('dts_document_types','dts_document_record.DOC_TYPE','=','dts_document_types.ID');
+        $query = $query->whereIn('dts_document_record.DOC_NO', $valid_doc);
+
+        if (Input::has('doc_from')) { $query = $query->where('dts_document_record.DOC_DATE', '>=', $doc_from); }
+        if (Input::has('doc_to')) { $query = $query->where('dts_document_record.DOC_DATE', '<=', $doc_to); }
+        if (Input::has('doc_type')) { $query = $query->where('dts_document_record.DOC_TYPE', '=', $doc_type); }
+        if (Input::has('doc_class')) { $query = $query->where('dts_document_record.DOC_CLASSIFICATION', '=', $doc_class); }
+        if (Input::has('doc_urgent')) { $query = $query->where('dts_document_record.DOC_URGENT', '=', $doc_urgent); }
+        if (Input::has('doc_signed')) { $query = $query->where('dts_document_record.SIGNED', '=', $doc_signed); }
+        if (Input::has('doc_status')) { $query = $query->where('dts_document_record.STATUS', '=', $doc_status); }
+
+        $query = $query->where('dts_document_record.DOC_CATEGORY', '=', $doc_cat);
+        $documents = $query->orderBy('dts_document_record.DOC_DATE', 'DESC')
+                           ->orderBy('dts_document_record.DOC_NO', 'DESC')
+                           ->paginate(50);
+
+        $doc_count = count($documents);
+        return view('denr.dts.activity.documentPageFilter', compact(['documents','doc_count']));
+    }
+
+    public function toCreate(){
+
+        $form = FormNoModel::where('id','=','2')->first();
+        $doc_action = DocActionModel::where('ID','!=','14')->orderBy('ID','ASC')->get();
+
+        $str = $form->form_no;
+        $no = strlen($str);
+        $new_no = str_pad($form->form_no+1, $no, "0", STR_PAD_LEFT);
+        $cur_no = str_pad($form->form_no, $no, "0", STR_PAD_LEFT); 
+        return view('denr.dts.activity.adddocuments')
+             ->with('formno', $form)
+             ->with('new_no', $new_no)
+             ->with('cur_no', $cur_no)
+             ->with('doc_action', $doc_action);
+    }
+
+    public function toInsert(Request $request)
     {
-        $model = new DocLogsModel;
-        $data = $model->select('SEEN')->where('ID','=',$id)->first();
-        return $data['SEEN'];
+        $user = Auth::user();
+        $doc_no = $request->doc_no;
+        $control_code = $request->control_code;
+        $doc_date = $request->doc_date;
+        $doc_time = $request->doc_time;
+        $date_time_start = $request->date_time_start;
+        $doc_type = $request->doc_type;
+        $doc_cat = $request->doc_cat;
+        $doc_from =  $request->doc_from;
+        $sender_type =  $request->sender_type;
+        $doc_origin_office = $request->doc_origin_office;
+        $doc_address = $request->doc_address;
+        $doc_subj = $request->doc_subject;
+        $doc_classification = $request->doc_classification;
+        $doc_urgent = $request->doc_urgent;
+        $doc_remarks = $request->doc_remarks;
+        $doc_processor = $user->id;
+        $doc_to =  $request->doc_to; 
+        $doc_action = $request->doc_action;
+        $send_type = $request->send_type;
+        $count_doc = DocRecordModel::where('DOC_NO','=', $doc_no)->count();
+
+        $DocumentRecord = [
+            'DOC_NO' => $doc_no,
+            'CONTROL_CODE' => $control_code,
+            'DOC_CATEGORY' => $doc_cat,
+            'DOC_TYPE' => $doc_type,
+            'DOC_DATE' => $doc_date,
+            'DOC_TIME' => $doc_time,
+            'ORIGIN_OFFICE' => $doc_origin_office,
+            'DOC_ADDRESS' => $doc_address,
+            'DOC_SUBJ' => $doc_subj,
+            'DOC_CLASSIFICATION' => $doc_classification,
+            'DOC_URGENT' => $doc_urgent,
+            'REMARKS' => $doc_remarks,
+            'STATUS' => 'F',
+            'SIGNED' => 'N',
+            'CREATED_BY' => $doc_processor
+        ];
+
+        if($count_doc == 0) {
+            DocRecordModel::insert($DocumentRecord);
+        } else if($count_doc > 0) {
+            DocRecordModel::where('DOC_NO','=', $doc_no)->update($DocumentRecord);
+        }
+
+        $data = [];
+
+        foreach($doc_from as $id => $sender) {
+
+            $count_sender = DocSenderModel::where('DOC_NO','=', $doc_no)
+                                          ->where('DOC_SENDER','=', $sender)
+                                          ->count();
+            if($sender != '') {
+                $sender_info = [
+                    'DOC_NO' => $doc_no,
+                    'DOC_SENDER' => $sender,
+                    'SENDER_TYPE' => $request->input('sender_type')[$id],
+                ];
+
+                if($count_sender == 0) {
+                    DocSenderModel::insert($sender_info);
+                } else if($count_sender > 0) {
+                    DocSenderModel::where('DOC_NO','=', $doc_no)
+                                  ->where('DOC_SENDER','=', $sender)
+                                  ->update($sender_info);
+                }
+            }
+
+            $data[] = $sender;
+        }
+
+        DocSenderModel::where('DOC_NO','=', $doc_no)
+                      ->whereNotIn('DOC_SENDER', $data)
+                      ->delete();
+
+        foreach($doc_to as $index => $col){
+
+            $document_log = [
+                'FW_NO' => 1,
+                'DOC_FROM' => Auth::user()->id,
+                'DOC_TO' => $request->input('doc_to')[$index],
+                'DOC_NO' => $doc_no,
+                'DOC_DT_LOG' => date('Y-m-d H:i:s'),
+                'REC_DATE_TIME' => $date_time_start,
+                'REL_DATE_TIME' => date('Y-m-d H:i:s'),
+                'DOC_REMARKS' => $doc_remarks,
+                'DOC_CATEGORY' => $doc_cat,
+                'ACTION_TO_BE_TAKEN' => $request->input('doc_action')[$index],
+                'SEEN' => 'N',
+                'SEND_TYPE' => $send_type,
+            ];
+
+            DocLogsModel::insert($document_log);
+        }
+
+        if($request->hasFile('attached_files')){
+
+            $FILE_ATTACHMENTS = $request->attached_files;
+
+            foreach($FILE_ATTACHMENTS AS $FILE){
+
+                $EXTENSION = $FILE->getClientOriginalExtension();
+                $DESCRIPTION = $FILE->getClientOriginalName();
+                $SIZE = $FILE->getClientSize();
+                $FILE_NAME = rand(11111111, 99999999). '.' . $EXTENSION;
+                $FILE->move('DTS_UPLOADS/', $FILE_NAME);
+                echo $FILE_NAME.' '.$FILE->getClientSize().'<br>';
+
+                $FILE_RECORD = [
+                    'FW_NO' => 1,
+                    'DOC_NO' => $doc_no,
+                    'ATTACHMENT_DESC' => $DESCRIPTION,
+                    'FILE_ATTACHMENT' => $FILE_NAME,
+                    'FILE_TYPE' => $EXTENSION,
+                    'ATTACH_CLASS' => 'RC'
+                ];
+
+                DocAttachmentsModel::insert($FILE_RECORD);
+            }
+        }
+
+        $formid = $request->input('formid');
+        $form_no = [
+            'form_no' => $request->input('neworder_no'),
+            'updated_by' => $user->id
+        ];
+
+        if($count_doc == 0) {
+            FormNoModel::where('id', '=', $formid)->update($form_no); 
+        }
+
+        Session::flash('success', 'Document ('.$doc_no.') successfully saved.');
+        return back();
+    }
+
+    public function toView($id, $id2){
+
+        $user = Auth::user();
+        $doc_no = decrypt($id);
+        $type = $id2;
+
+        $this->viewSeenLogs($doc_no);
+        
+        $document_details = DocRecordModel::where('DOC_NO', '=', $doc_no)->first();
+        $document_attachments = DocAttachmentsModel::where('DOC_NO', '=', $doc_no)->where('ATTACH_CLASS', '=', 'RC')->get();
+        $document_senders1 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->first();
+        $document_senders2 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->skip(1)->take(100)->get();
+        $document_senders3 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->get();
+        $document_receivers = DocReceiverModel::where('DOC_NO', '=', $doc_no)->get();
+
+        $return_to = DocLogsModel::where('DOC_NO', '=', $doc_no)->where('DOC_TO', '=', $user->id)->first();
+        $form = FormNoModel::where('id','=','2')->first();
+        $str = $form->form_no;
+        $no = strlen($str);
+        $new_no = str_pad($form->form_no+1, $no, "0", STR_PAD_LEFT);
+        $cur_no = str_pad($form->form_no, $no, "0", STR_PAD_LEFT);
+
+        $document_logs = DocRecordModel::select('dts_document_logs.*', 'dts_document_record.*', 'dts_action_to_be_taken.ACTION', 'user_from.fname as from_fname', 'user_from.lname as from_lname', 'user_to.fname as to_fname', 'user_to.lname as to_lname')
+                                       ->leftJoin('dts_document_logs','dts_document_record.DOC_NO','=','dts_document_logs.DOC_NO')
+                                       ->join('users as user_from','dts_document_logs.DOC_FROM','=','user_from.id')
+                                       ->join('users as user_to','dts_document_logs.DOC_TO','=','user_to.id')
+                                       ->join('dts_action_to_be_taken','dts_document_logs.ACTION_TO_BE_TAKEN','=','dts_action_to_be_taken.ID')
+                                       ->where('dts_document_logs.DOC_NO','=', $doc_no)
+                                       ->orderBy('dts_document_logs.ID', 'ASC')
+                                       ->get();
+
+        $for_end = DocLogsModel::where('DOC_NO','=', $doc_no)->orderBy('REL_DATE_TIME','DESC')->first();
+
+        $lastLog = DocLogsModel::select('DOC_FROM')->where('DOC_NO', '=', $doc_no)->orderBy('FW_NO','DESC')->first();
+        
+        return view('denr.dts.activity.viewdocuments')
+                ->with('documents', $document_details)
+                ->with('attachments', $document_attachments)
+                ->with('senders1', $document_senders1)
+                ->with('senders2', $document_senders2)
+                ->with('senders3', $document_senders3)
+                ->with('receivers', $document_receivers)
+                ->with('formno', $form)
+                ->with('new_no', $new_no)
+                ->with('cur_no', $cur_no)
+                ->with('id', $id)
+                ->with('for_end', $for_end)
+                ->with('history_logs', $document_logs)
+                ->with('end_user', $lastLog['DOC_FROM']);
+    }
+
+    public function viewSeenLogs($doc_no){
+
+        $doc_to = Auth::user()->id;
+        $checkStatus = $this->viewSeenStatus($doc_no,$doc_to);
+
+        if($checkStatus == 'N') {
+            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+            DocLogsModel::where('DOC_TO', '=', $doc_to)
+                        ->where('DOC_NO', '=', $doc_no)
+                        ->update($seen_log);
+        }
     }
 
     public function viewSeenStatus($doc_no,$doc_to)
@@ -174,8 +386,142 @@ trait DocumentTrackingTrait
         return $data['SEEN'];
     }
 
+    public function toForward(Request $request)
+    {
+        $doc_to =  $request->doc_to; 
+        $doc_action =  $request->doc_action; 
+        $doc_no = $request->doc_no;
+        $doc_remarks = $request->doc_remarks;
+        $doc_cat = $request->doc_category;
+        $send_type = $request->send_type;
 
-    public function DownloadAttachmentFunction($id, $id2, $id3){
+        $forward = DocLogsModel::where('DOC_NO', '=', $doc_no)->orderBy('FW_NO', 'DESC')->first();
+        $released = DocLogsModel::where('DOC_NO', '=', $doc_no)->orderBy('ID', 'DESC')->first();
+
+        foreach($doc_to as $index => $col){
+
+            $document_log = [
+                'FW_NO' => $forward->FW_NO + 1,
+                'DOC_FROM' => Auth::user()->id,
+                'DOC_TO' => $request->input('doc_to')[$index],
+                'DOC_NO' => $doc_no,
+                'DOC_DT_LOG' => date('Y-m-d H:i:s'),
+                'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
+                'REL_DATE_TIME' => date('Y-m-d H:i:s'),
+                'DOC_REMARKS' => $doc_remarks,
+                'DOC_CATEGORY' => $doc_cat,
+                'ACTION_TO_BE_TAKEN' => $request->input('doc_action')[$index],
+                'SEEN' => 'N',
+                'SEND_TYPE' => $send_type,
+            ];
+
+            DocLogsModel::insert($document_log);
+        }
+
+        $doc_action = ['ACTION_STATUS' => 1];
+        DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
+
+        if($request->hasFile('attached_files')){
+
+            $FILE_ATTACHMENTS = $request->attached_files;
+
+            foreach($FILE_ATTACHMENTS AS $FILE){
+
+                $EXTENSION = $FILE->getClientOriginalExtension();
+                $DESCRIPTION = $FILE->getClientOriginalName();
+                $SIZE = $FILE->getClientSize();
+                $FILE_NAME = rand(11111111, 99999999). '.' . $EXTENSION;
+                $FILE->move('DTS_UPLOADS/', $FILE_NAME);
+                echo $FILE_NAME.' '.$FILE->getClientSize().'<br>';
+
+                $FILE_RECORD = [
+                    'FW_NO' => $forward->FW_NO + 1,
+                    'DOC_NO' => $doc_no,
+                    'ATTACHMENT_DESC' => $DESCRIPTION,
+                    'FILE_ATTACHMENT' => $FILE_NAME,
+                    'FILE_TYPE' => $EXTENSION,
+                    'ATTACH_CLASS' => $send_type,
+                ];
+
+                DocAttachmentsModel::insert($FILE_RECORD);
+            }
+        }
+
+        $document_rec_stat_update = ['STATUS' => 'F'];
+        DocRecordModel::where('DOC_NO', '=', $doc_no)->update($document_rec_stat_update);
+        return back();
+    }
+
+    public function toComplete(Request $request)
+    {
+        $user = Auth::user();
+        $com_id = $request->input('com_id');
+        $doc_cat = $request->input('doc_cat');
+        $remarks = $request->input('end_remarks');
+        $date2day = date('Y-m-d');
+        $encode = Crypt::encrypt($com_id);
+
+        $forward = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('FW_NO', 'DESC')->first();
+        $released = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('ID', 'DESC')->first();
+
+        $document_log = [
+            'FW_NO' => $forward->FW_NO + 1,
+            'DOC_FROM' => $forward->DOC_TO,
+            'DOC_TO' => $forward->DOC_TO,
+            'DOC_NO' => $com_id,
+            'DOC_DT_LOG' => date('Y-m-d H:i:s'),
+            'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
+            'REL_DATE_TIME' => date('Y-m-d H:i:s'),
+            'DOC_REMARKS' => $remarks,
+            'DOC_CATEGORY' => $doc_cat,
+            'ACTION_TO_BE_TAKEN' => 14,
+            'ACTION_STATUS' => 1,
+            'SEEN' => 'Y',
+            'SEEN_DATE_TIME' => date('Y-m-d H:i:s'),
+            'SEND_TYPE' => 'FW',
+        ];
+
+        DocLogsModel::insert($document_log);
+
+        $doc_action = ['ACTION_STATUS' => 1];
+        DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
+
+        $complete = ['STATUS' => 'C', 'COMPLETED_BY' => $user->id, 'DATE_COMPLETED' => date('Y-m-d H:i:s')];
+        DocRecordModel::where('DOC_NO', '=', $com_id)->update($complete);
+                    
+        $window_page = 'Document';
+        $module_code = 'DTS';
+        $window_type = 'ACT';
+        $action_type = 'APPROVE';
+        $remarks = 'Ended Document '.$com_id;
+                                            
+        include(app_path() . '/Http/Traits/denr/app/audit_trail_log.php');       
+        Session::flash('success', ' Document ('.$com_id.') successfully ended.');
+        return back();
+
+    }
+
+    public function checkSeenStatus($id)
+    {
+        $model = new DocLogsModel;
+        $data = $model->select('SEEN')->where('ID','=',$id)->first();
+        return $data['SEEN'];
+    }
+
+    public function toSeen(Request $request) {
+
+        $log_id = $request->log_id;
+        $checkStatus = $this->checkSeenStatus($log_id);
+
+        if($checkStatus == 'N') {
+            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
+            DocLogsModel::where('ID', '=', $log_id)->update($seen_log);
+            Session::flash('success', 'Marked as Seen.');
+            return back();
+        }
+    }
+
+    public function toDownload($id, $id2, $id3){
 
         if(Auth::user()->id == $id3) {
             $checkStatus = $this->checkSeenStatus($id2);
@@ -189,7 +535,7 @@ trait DocumentTrackingTrait
         return Response::download($filepath);
     }
 
-    public function PreviewAttachmentFunction($id, $id2, $id3, $id4){
+    public function toPreview($id, $id2, $id3, $id4){
 
         if(Auth::user()->id == $id4) {
             $checkStatus = $this->checkSeenStatus($id2);
@@ -221,33 +567,7 @@ trait DocumentTrackingTrait
         }
     }
 
-    public function SeenLogFunction(Request $request) {
-
-        $log_id = $request->log_id;
-        $checkStatus = $this->checkSeenStatus($log_id);
-
-        if($checkStatus == 'N') {
-            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-            DocLogsModel::where('ID', '=', $log_id)->update($seen_log);
-            Session::flash('success', 'Marked as Seen.');
-            return back();
-        }
-    }
-
-    public function ViewSeenLogFunction($doc_no){
-
-        $doc_to = Auth::user()->id;
-        $checkStatus = $this->viewSeenStatus($doc_no,$doc_to);
-
-        if($checkStatus == 'N') {
-            $seen_log = ['SEEN' => 'Y', 'SEEN_DATE_TIME' => date('Y-m-d H:i:s')];
-            DocLogsModel::where('DOC_TO', '=', $doc_to)
-                        ->where('DOC_NO', '=', $doc_no)
-                        ->update($seen_log);
-        }
-    }
-
-    public function PrintDocumentSlipFunction($id) {
+    public function toPrintSlip($id) {
 
         $user = Auth::user();
         $doc_no = decrypt($id);
@@ -290,7 +610,7 @@ trait DocumentTrackingTrait
                 ->with('history_logs', $document_logs);
     }
 
-    public function PrintManualSlipFunction($id) {
+    public function toPrintManual($id) {
 
         $user = Auth::user();
         $doc_no = decrypt($id);
@@ -334,53 +654,6 @@ trait DocumentTrackingTrait
                 ->with('history_logs', $document_logs);
     }
 
-
-    public function AddDocumentsFunction(){
-
-        $form = FormNoModel::where('id','=','2')->first();
-        $doc_action = DocActionModel::where('ID','!=','14')->orderBy('ID','ASC')->get();
-
-        $str = $form->form_no;
-        $no = strlen($str);
-        $new_no = str_pad($form->form_no+1, $no, "0", STR_PAD_LEFT);
-        $cur_no = str_pad($form->form_no, $no, "0", STR_PAD_LEFT); 
-        return view('denr.dts.activity.adddocuments')
-             ->with('formno', $form)
-             ->with('new_no', $new_no)
-             ->with('cur_no', $cur_no)
-             ->with('doc_action', $doc_action);
-    }
-
-    public function ForwardedDocumentsFunction(){
-
-        $user = Auth::user();
-        $doc_forwarded = DocRecordModel::leftJoin('dts_document_logs','dts_document_record.DOC_NO','=','dts_document_logs.DOC_NO')
-                                        ->where('dts_document_logs.DOC_FROM','=', $user->id)
-                                        ->orderBy('dts_document_logs.DOC_DT_LOG', 'DESC')
-                                        ->get();
-
-        $doc_count = count($doc_forwarded);
-    	return view('denr.dts.activity.forwardeddocuments')
-             ->with('doc_forwarded', $doc_forwarded)
-             ->with('doc_count', $doc_count);
-
-    }
-
-    public function ReceivedDocumentsFunction(){
-
-        $user = Auth::user();
-        $doc_received = DocRecordModel::leftJoin('dts_document_logs','dts_document_record.DOC_NO','=','dts_document_logs.DOC_NO')
-                                        ->where('dts_document_logs.DOC_TO','=', $user->id)
-                                        ->orderBy('dts_document_logs.DOC_DT_LOG', 'DESC')
-                                        ->get();
-                                        
-        $doc_count = count($doc_received);
-    	return view('denr.dts.activity.receiveddocuments')
-             ->with('doc_received', $doc_received)
-             ->with('doc_count', $doc_count);
-    	
-    }
-
     public function ajaxDocNoFunction(Request $request) {
 
         $cat = $request->input('category');
@@ -400,53 +673,7 @@ trait DocumentTrackingTrait
         return response($doc);
     }
 
-    public function ViewDocumentsFunction($id, $id2){
-
-        $user = Auth::user();
-        $doc_no = decrypt($id);
-        $type = $id2;
-
-        $this->ViewSeenLogFunction($doc_no);
-        
-        $document_details = DocRecordModel::where('DOC_NO', '=', $doc_no)->first();
-        $document_attachments = DocAttachmentsModel::where('DOC_NO', '=', $doc_no)->where('ATTACH_CLASS', '=', 'RC')->get();
-        $document_senders1 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->first();
-        $document_senders2 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->skip(1)->take(100)->get();
-        $document_senders3 = DocSenderModel::where('DOC_NO', '=', $doc_no)->orderBy('DOC_SENDER', 'ASC')->get();
-        $document_receivers = DocReceiverModel::where('DOC_NO', '=', $doc_no)->get();
-
-        $return_to = DocLogsModel::where('DOC_NO', '=', $doc_no)->where('DOC_TO', '=', $user->id)->first();
-        $form = FormNoModel::where('id','=','2')->first();
-        $str = $form->form_no;
-        $no = strlen($str);
-        $new_no = str_pad($form->form_no+1, $no, "0", STR_PAD_LEFT);
-        $cur_no = str_pad($form->form_no, $no, "0", STR_PAD_LEFT);
-
-        $document_logs = DocRecordModel::select('dts_document_logs.*', 'dts_document_record.*', 'dts_action_to_be_taken.ACTION', 'user_from.fname as from_fname', 'user_from.lname as from_lname', 'user_to.fname as to_fname', 'user_to.lname as to_lname')
-                                       ->leftJoin('dts_document_logs','dts_document_record.DOC_NO','=','dts_document_logs.DOC_NO')
-                                       ->join('users as user_from','dts_document_logs.DOC_FROM','=','user_from.id')
-                                       ->join('users as user_to','dts_document_logs.DOC_TO','=','user_to.id')
-                                       ->join('dts_action_to_be_taken','dts_document_logs.ACTION_TO_BE_TAKEN','=','dts_action_to_be_taken.ID')
-                                       ->where('dts_document_logs.DOC_NO','=', $doc_no)
-                                       ->orderBy('dts_document_logs.ID', 'ASC')
-                                       ->get();
-
-        $for_end = DocLogsModel::where('DOC_NO','=', $doc_no)->orderBy('REL_DATE_TIME','DESC')->first();
-        
-        return view('denr.dts.activity.viewdocuments')
-                ->with('documents', $document_details)
-                ->with('attachments', $document_attachments)
-                ->with('senders1', $document_senders1)
-                ->with('senders2', $document_senders2)
-                ->with('senders3', $document_senders3)
-                ->with('receivers', $document_receivers)
-                ->with('formno', $form)
-                ->with('new_no', $new_no)
-                ->with('cur_no', $cur_no)
-                ->with('id', $id)
-                ->with('for_end', $for_end)
-                ->with('history_logs', $document_logs);
-    }
+    
 
     public function AjaxHistoryLogsDocumentFunction(Request $request){
 
@@ -506,57 +733,7 @@ trait DocumentTrackingTrait
         return json_encode($response);
     }
 
-
-    public function DocumentCompleteFunction(Request $request)
-    {
-        $user = Auth::user();
-        $com_id = $request->input('com_id');
-        $doc_cat = $request->input('doc_cat');
-        $remarks = $request->input('end_remarks');
-        $date2day = date('Y-m-d');
-        $encode = Crypt::encrypt($com_id);
-
-        $forward = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('FW_NO', 'DESC')->first();
-        $released = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('ID', 'DESC')->first();
-
-        $document_log = [
-            'FW_NO' => $forward->FW_NO + 1,
-            'DOC_FROM' => $forward->DOC_TO,
-            'DOC_TO' => $forward->DOC_TO,
-            'DOC_NO' => $com_id,
-            'DOC_DT_LOG' => date('Y-m-d H:i:s'),
-            'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
-            'REL_DATE_TIME' => date('Y-m-d H:i:s'),
-            'DOC_REMARKS' => $remarks,
-            'DOC_CATEGORY' => $doc_cat,
-            'ACTION_TO_BE_TAKEN' => 14,
-            'ACTION_STATUS' => 1,
-            'SEEN' => 'Y',
-            'SEEN_DATE_TIME' => date('Y-m-d H:i:s'),
-            'SEND_TYPE' => 'FW',
-        ];
-
-        DocLogsModel::insert($document_log);
-
-        $doc_action = ['ACTION_STATUS' => 1];
-        DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
-
-        $complete = ['STATUS' => 'C', 'COMPLETED_BY' => $user->id, 'DATE_COMPLETED' => date('Y-m-d H:i:s')];
-        DocRecordModel::where('DOC_NO', '=', $com_id)->update($complete);
-                    
-        $window_page = 'Document';
-        $module_code = 'DTS';
-        $window_type = 'ACT';
-        $action_type = 'APPROVE';
-        $remarks = 'Ended Document '.$com_id;
-                                            
-        include(app_path() . '/Http/Traits/denr/app/audit_trail_log.php');       
-        Session::flash('success', ' Document ('.$com_id.') successfully ended.');
-        return back();
-
-    }
-
-    public function DocumentSignFunction(Request $request)
+    public function toSign(Request $request)
     {
         $user = Auth::user();
         $com_id = $request->input('com_id');

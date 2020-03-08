@@ -13,7 +13,7 @@
 
         $.ajax ({
             type: "GET",
-            url: "{{ route('page.documents') }}",
+            url: "{{ route('dts.document.page') }}",
             data: dataString,
             cache: false,
             success: function(html) { 

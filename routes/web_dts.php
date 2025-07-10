@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\denr\DTS_DocLogsModel;
+
 Route::group(['middleware' => 'auth'],function() {
 
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -29,6 +31,12 @@ Route::group(['middleware' => 'auth'],function() {
     //FILTER
 	Route::get('/dts/activity/document/filter', 'denr\dts\activity\DocumentTrackingController@filter')->name('dts.document.filter');
 
+	//ACTED
+	Route::get('/dts/activity/document/acted', 'denr\dts\activity\DocumentTrackingController@acted')->name('dts.document.acted');
+
+	//COMPLETED
+	Route::get('/dts/activity/document/completed', 'denr\dts\activity\DocumentTrackingController@completed')->name('dts.document.completed');
+
 	//CREATE-FORM
 	Route::get('/dts/activity/document/create', 'denr\dts\activity\DocumentTrackingController@create')->name('dts.document.create');
 
@@ -43,6 +51,16 @@ Route::group(['middleware' => 'auth'],function() {
 
 	//COMPLETE
 	Route::post('/dts/activity/document/complete', 'denr\dts\activity\DocumentTrackingController@complete')->name('dts.document.complete');
+
+	//RECALL
+	Route::post('/dts/activity/document/recall', 'denr\dts\activity\DocumentTrackingController@recall')->name('dts.document.recall');
+	Route::post('/dts/activity/document/recallsingle', 'denr\dts\activity\DocumentTrackingController@recallSingle')->name('dts.document.recallsingle');
+	
+	// FOLLOWUP
+	Route::post('/dts/activity/document/followup', 'denr\dts\activity\DocumentTrackingController@followup')->name('dts.document.followup');
+
+	//EDIT - UPDATE
+	Route::post('/dts/activity/document/updatedetails', 'denr\dts\activity\DocumentTrackingController@updateDetails')->name('dts.document.updatedetails');
 
 	//SEEN
 	Route::post('/dts/activity/document/seen', 'denr\dts\activity\DocumentTrackingController@seen')->name('dts.document.seen');
@@ -79,6 +97,9 @@ Route::group(['middleware' => 'auth'],function() {
 	//VIEW LOG ATTACHMENT MODAL
 	Route::get('/ajax-log-attachment', 'denr\dts\activity\DocumentTrackingController@LogAttachmentAjax')->name('ajax.log.attachment');
 
+	//REMOVE ATTACHMENT ON EDIT FORM
+	Route::get('/ajax-remove-attachment/{id}', 'denr\dts\activity\DocumentTrackingController@ajaxRemoveAttachment')->name('ajax.remove.attachment');
+
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// DTS - MAINTENANCE
@@ -112,4 +133,70 @@ Route::group(['middleware' => 'auth'],function() {
 	//POST DOCUMENT REPORT 
 	Route::post('/dts/report/document/print', 'denr\dts\report\DocumentReportController@DocumentReportResult')->name('document.report.result');
 
+
+	Route::get('/dts/test', function () {
+		$doc_nos = DB::table('dts_document_logs')
+		->select('doc_no')
+		->where(function ($query) {
+			$query->where('doc_to', 1)
+				->orWhere('doc_from', 1);
+		})
+		->distinct()
+		->get();
+
+		$outgoing_doc_ids = DTS_DocLogsModel::select('DOC_NO')
+            ->where([
+                'ACTION_STATUS' => 0,
+                'DOC_TO' => 1,
+                'DOC_CATEGORY' => "OUT"
+            ])
+            // ->whereNotIn('DOC_NO', $excluded_doc_ids)
+            ->distinct()
+            ->get();
+
+        $incoming_doc_ids = DTS_DocLogsModel::select('DOC_NO')
+			->where([
+				'ACTION_STATUS' => 0,
+				'DOC_TO' => 1,
+				'DOC_CATEGORY' => "IN"
+			])
+			// ->whereNotIn('DOC_NO', $excluded_doc_ids)
+			->distinct()
+			->get();
+
+        $completed_doc_ids = DTS_DocLogsModel::select('DOC_NO')
+            ->where([
+                'ACTION_TO_BE_TAKEN' => 14,
+                'DOC_TO' => 1
+            ])
+            ->whereNotIn('DOC_NO', array_merge($outgoing_doc_ids->pluck('DOC_NO')->toArray(), $incoming_doc_ids->pluck('DOC_NO')->toArray()))
+            ->distinct()
+            ->get()
+            ->pluck('DOC_NO')
+            ->toArray();
+
+        $acted_doc_ids = DTS_DocLogsModel::select('DOC_NO')
+            ->where([
+                'ACTION_STATUS' => 1,
+                'DOC_TO' => 1
+            ])
+            ->whereNotIn('DOC_NO', array_merge($completed_doc_ids, $outgoing_doc_ids->pluck('DOC_NO')->toArray(), $incoming_doc_ids->pluck('DOC_NO')->toArray()))
+            ->distinct()
+            ->get()
+            ->pluck('DOC_NO')
+            ->toArray();
+
+		$excluded_doc_ids = array_merge($acted_doc_ids, $completed_doc_ids);
+
+		$doc_ids = array_merge($incoming_doc_ids->pluck('doc_no')->toArray(), $outgoing_doc_ids->pluck('doc_no')->toArray(), $excluded_doc_ids);
+
+		$doc_nos_array = $doc_nos->pluck('doc_no')->toArray();
+		$added_docs = array_diff($doc_nos_array, $doc_ids);
+
+		return $added_docs;
+	});	
+});
+
+Route::get("/dts/test2", function () {
+	return "test";
 });

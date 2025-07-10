@@ -4,7 +4,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="icon" href="{{URL::asset('/img/ascii_logo.png')}}">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="icon" href="{{URL::asset('/img/denr_logo.png')}}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 

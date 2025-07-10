@@ -45,7 +45,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color: #F00;"><i class="fa fa-warning"></i> System Warning</h4>
+                <h4 class="modal-title text-warning"><i class="fa fa-warning"></i> System Warning</h4>
+                 <!-- style="color: #F00;" -->
             </div>
             <div class="modal-body" style="padding: 15px; text-align: left; color: #000; ">
                 <div style="padding: 20px 20px 20px 25px; text-align: left; font-size: 14px; color: #000; background-color: #FFFAFA; border-radius: 3px; border: 1px solid #E5E5E5;">

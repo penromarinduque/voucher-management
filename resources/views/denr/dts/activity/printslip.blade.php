@@ -1,5 +1,7 @@
 <?php $user = Auth::user(); ?>
 
+@inject('helper', 'App\Helpers\Helper')
+
 @extends('denr.layouts.window')
 
 @section('page-css')
@@ -25,18 +27,18 @@
                             
                             <div style="width:1000px; margin:auto; padding:20px; font-family: Times New Roman;">
 
-                                <div style="width: 1000px; margin-bottom: 10px; margin-top: -30px;">
-                                    <img src="{{URL::asset('/img/denr_logo.png')}}" width="120" height="120"  style="margin-bottom:-100px;" />
-                                    <div style="width: 1000px; padding-left: 130px; font-size:20px; line-height: 23px; font-weight: bold;">
-                                        <font style="color: #000;"> Republic of the Philippines </font><br/>
-                                        <font style="color: green;"> Department of Environment and Natural Resources </font><br/>
-                                        <font style="color: green;"> Provincial Environment and Natural Resources Office </font><br/>
-                                        <font style="color: #09C;"> Boac, Marinduque </font>
-                                    </div>
-                                </div>
+                                <!-- <div style="width: 1000px; margin-bottom: 10px; margin-top: -30px;"> -->
+                                    {{--<img src="{{URL::asset('/img/denr_logo.png')}}" width="120" height="120"  style="margin-bottom:-100px;" />--}}
+                                    <!-- <div style="width: 1000px; padding-left: 130px; font-size:20px; line-height: 23px; font-weight: bold;"> -->
+                                        <!-- <font style="color: #000;"> Republic of the Philippines </font><br/> -->
+                                        <!-- <font style="color: green;"> Department of Environment and Natural Resources </font><br/> -->
+                                        <!-- <font style="color: green;"> Provincial Environment and Natural Resources Office </font><br/> -->
+                                        <!-- <font style="color: #09C;"> Boac, Marinduque </font> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
 
-                                <hr style="height: 5px; background-color: purple;"/>
-
+                                <!-- <hr style="height: 5px; background-color: purple;"/> -->
+                                <img src="{{URL::asset('/img/header.png')}}" width="100%" />
                                 <table style="line-height: 30px; font-size: 16px; width: 100%; font-family: arial;">
                                     <tr>
                                         <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px"> PENRO DOCUMENT ACTION AND TRACKING SLIP</td>
@@ -103,14 +105,15 @@
                                         <td style="width:10%; padding: 5px;vertical-align: middle;font-size: 12px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Received</td>
                                         <td style="width:10%; padding: 5px;vertical-align: middle;font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;"> Released</td>
                                         <td style="width:12%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Runtime</td>
-                                        <td style="width:30%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be taken / Remarks</td>
+                                        <td style="width:30%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Action to be taken</td>
+                                        <td style="width:30%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase;font-weight: bold; text-align: center;">Remarks</td>
                                         <td style="width:12%; padding: 5px;vertical-align: middle; font-size: 12px; color: #5B5B5B; text-transform: uppercase; font-weight: bold; text-align: center;">Attachments</td>
                                     </tr>
 
                                     @foreach($history_logs as $id => $col)
 
                                         @php
-
+                                            $time_consumed = $helper->computeRunTime($col->REC_DATE_TIME, $col->REL_DATE_TIME);
                                             $datetime1 = new DateTime($col->REC_DATE_TIME);
                                             $datetime2 = new DateTime($col->REL_DATE_TIME);
                                             $interval = $datetime1->diff($datetime2);
@@ -118,6 +121,8 @@
                                             $days = $interval->format('%d');
                                             $hours = $interval->format('%h');
                                             $minutes = $interval->format('%i');
+
+                                            $checker = $datetime1->format('%h %i') != $datetime2->format('%h %i');
 
                                             if($days > 0) {
                                                 if($days > 1) { $con_days = $days.' days, '; } 
@@ -137,9 +142,9 @@
                                                     if($hours > 0) { $con_minutes = ' & '.$minutes.' min. '; } 
                                                     else if($hours == 0) { $con_minutes = $minutes.' min. '; }
                                                 }
-                                            } else if($minutes == 0) { $con_minutes = ''; }
+                                            } else if($minutes == 0) { $con_minutes = ($checker && $interval->format('%s') > 0) ? 1 . ' min' : ""; }
                                             
-                                            $time_consumed = $con_days.' '.$con_hours.' '.$con_minutes;
+                                            $time_consumed_x = $con_days.' '.$con_hours.' '.$con_minutes;
                                             $log_attachment = DB::table('dts_document_attachments')->where('FW_NO', '=', $col->FW_NO)->where('DOC_NO', '=', $col->DOC_NO)->get();
 
                                         @endphp
@@ -150,10 +155,16 @@
                                                     <ul style="padding-left: 20px; margin-bottom: 0px;">
                                                     @foreach($senders2 as $id => $col2)
                                                         @if($col2->SENDER_TYPE == 'IN')
-                                                            @php $userinfo = DB::table('users')->where('id','=', $col2->DOC_SENDER)->first(); @endphp
+                                                            @php $user_id = ($first_log_id==$col->ID) ? $col2->DOC_SENDER : $col->DOC_FROM; @endphp
+                                                            @php $userinfo = DB::table('users')->where('id','=', $user_id)->first(); @endphp
                                                             <li>{{ $userinfo->fname }} {{ $userinfo->lname }}</li>
                                                         @elseif($col2->SENDER_TYPE == 'OUT')
+                                                            @if($first_log_id==$col->ID)
                                                             <li>{{ $col2->DOC_SENDER }}</li>
+                                                            @else
+                                                            @php $userinfo = DB::table('users')->where('id','=', $col->DOC_FROM)->first(); @endphp
+                                                            <li>{{ $userinfo->fname }} {{ $userinfo->lname }}</li>
+                                                            @endif
                                                         @endif
                                                     @endforeach
                                                     </ul>
@@ -171,8 +182,9 @@
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REC_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REC_DATE_TIME)) }}</td>
                                             <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{ date('m/d/Y', strtotime($col->REL_DATE_TIME)) }} <br/> {{ date('h:i A', strtotime($col->REL_DATE_TIME)) }}</td>
                                             <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{ $time_consumed }}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">@if($col->ACTION != 13){{$col->ACTION}}@endif {{$col->DOC_REMARKS}}</td>
-                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"">
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">@if($col->ACTION != 13){{$col->ACTION}}@endif</td>
+                                            <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$col->DOC_REMARKS}}</td>
+                                            <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">
                                                 <ul style="padding: 0px 0px 0px 15px;">
                                                 @foreach($log_attachment as $id => $att)
                                                     <li>{{ $att->FILE_ATTACHMENT }}</li>
@@ -184,6 +196,13 @@
                                         @if($col->ACTION_STATUS == 0)
 
                                             @php
+                                                $now = date('m/d/Y H:i:s');
+                                                $rcvd_dt = $col->REL_DATE_TIME;
+                                                $rcvd_d = date('m/d/Y', strtotime($rcvd_dt));
+                                                $rcvd_t = date('h:i A', strtotime($rcvd_dt));
+                                                $rcvd_runtime = $helper->computeRunTime($rcvd_dt, $now);
+
+                                                $new_time_consumed = $helper->computeRunTime($col->SEEN_DATE_TIME, $col->FOR_DATE_TIME);
 
                                                 $new_datetime1 = new DateTime($col->SEEN_DATE_TIME);
                                                 $new_datetime2 = new DateTime(date('Y-m-d H:i:s'));
@@ -212,7 +231,7 @@
                                                         else if($new_hours == 0) { $new_con_minutes = $new_minutes.' min. '; }
                                                     }
                                                 } else if($new_minutes == 0) { $new_con_minutes = ''; }
-                                                $new_time_consumed = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
+                                                $new_time_consumed_x = $new_con_days.' '.$new_con_hours.' '.$new_con_minutes;
                                             
                                             @endphp
 
@@ -231,19 +250,23 @@
                                             @endif
 
                                             <tr class="log-history">
-                                                <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">
+                                                <td rowspan="2" style="text-align:left;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;">
                                                     <ul style="padding-left: 20px; margin-bottom: 0px;">
                                                         <li>{{$col->to_fname}} {{$col->to_lname}}</li>
                                                     </ul>
                                                 </td>
-                                                <td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;">{{$rec_date}}<br/>{{$rec_time}}</td>
-                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
-                                                <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">{{$run_time}}</td>
-                                                <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:14px;">Pending / No Action Taken</td>
-                                                <td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td rowspan="2" style="text-align:left;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;">{{$rcvd_d}}<br/>{{$rcvd_t}}</td>
+                                                <td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:14px;">{{$rcvd_runtime}}</td>
+                                                <td rowspan="2" style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:14px;"></td>
+                                                <td rowspan="2" style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;"></td>
                                             </tr>
-
+                                            <tr class="log-history">
+                                                <td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;"><b>Viewed on:</b><br>{{$rec_date}}<br/>{{$rec_time}}</td>
+                                                <td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:14px;"></td>
+                                                <td style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:14px;">{{$run_time}}</td>
+                                            </tr>
                                         @endif
 
                                     @endforeach

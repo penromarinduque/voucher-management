@@ -14,7 +14,7 @@ use App\Http\Traits\denr\app\UserAccessTraits;
 
 class DocumentTrackingController extends Controller
 {
-	use DocumentTrackingTrait, UserAccessTraits;
+    use DocumentTrackingTrait, UserAccessTraits;
 
     public function index($id)
     {
@@ -53,6 +53,7 @@ class DocumentTrackingController extends Controller
 
     public function insert(Request $request)
     {
+            // return $request;
         if($this->user_access()){
             return $this->toInsert($request);
         } else {
@@ -73,17 +74,32 @@ class DocumentTrackingController extends Controller
 
     public function forward(Request $request)
     {
-        if($this->user_access()){
-            return $this->toForward($request);
-        } else {
-            Session::flash('failed', 'You have no rights to access '.$this->window_desc());
-            return back();
-        }
+        return $this->toForward($request);
     }
 
     public function complete(Request $request)
     {
         return $this->toComplete($request);
+    }
+
+    public function recall(Request $request)
+    {
+        return $this->toRecall($request);
+    }
+
+    public function followup(Request $request)
+    {
+        return $this->toFollowup($request);
+    }
+
+    public function recallSingle(Request $request)
+    {
+        return $this->toRecall2($request);
+    }
+
+    public function updateDetails(Request $request)
+    {
+        return $this->toUpdate($request);
     }
 
     public function seen(Request $request)
@@ -134,5 +150,20 @@ class DocumentTrackingController extends Controller
     public function sign(Request $request)
     {
         return $this->toSign($request);
+    }
+
+    public function acted(Request $request)
+    {
+        return $this->toActed($request);
+    }
+
+    public function completed(Request $request)
+    {
+        return $this->toCompleted($request);
+    }
+
+    public function ajaxRemoveAttachment($id)
+    {
+        return $this->ajaxToRemoveAttachment($id);
     }
 }

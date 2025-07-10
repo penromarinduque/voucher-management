@@ -39,7 +39,7 @@ trait HomeTraits
         $user = Auth::user();
         return view('denr.dts.dashboard_dts');
     }
-
+    
     public function LeaveMonitoringFunction()
     {
         $user = Auth::user();

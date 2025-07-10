@@ -19,7 +19,7 @@
 
     </div>
 
-    <div class="panel-footer" style="text-align: center;">Welcome to Department of Environment and National Resources</div>
+    <div class="panel-footer" style="text-align: center;">Department of Environment and Natural Resources</div>
 
 </body>
 

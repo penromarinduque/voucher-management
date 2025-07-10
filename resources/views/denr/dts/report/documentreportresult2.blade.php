@@ -16,17 +16,19 @@
                             <a onclick="window.print();" id="gen_link"><button type="button" class="btn btn-default btn-xs" style="height: 25px; width:60px; font-size: 11px; float: right; margin-right: 10px;" data-toggle="tooltip" data-placement="right" title="Print Travel Order"><i class="fa fa-print"></i> PRINT</button></a>
                                         
 
-                            <div style="width: 1000px; margin-bottom: 10px; font-family: Times New Roman;">
-                                <img src="{{URL::asset('/img/denr_logo.png')}}" width="120" height="120"  style="margin-bottom:-100px; margin-left: 0px;" />
-                                <div style="width: 1000px; padding-left: 130px; font-size:20px; line-height: 23px; font-weight: bold;">
-                                    <font style="color: #000;"> Republic of the Philippines </font><br/>
-                                    <font style="color: green;"> Department of Environment and Natural Resources </font><br/>
-                                    <font style="color: green;"> Provincial Environment and Natural Resources Office </font><br/>
-                                    <font style="color: #09C;"> Boac, Marinduque </font>
-                                </div>
-                            </div>
+                            <!-- <div style="width: 1000px; margin-bottom: 10px; font-family: Times New Roman;"> -->
+                                {{--<img src="{{URL::asset('/img/denr_logo.png')}}" width="120" height="120"  style="margin-bottom:-100px; margin-left: 0px;" />--}}
+                                <!-- <div style="width: 1000px; padding-left: 130px; font-size:20px; line-height: 23px; font-weight: bold;"> -->
+                                    <!-- <font style="color: #000;"> Republic of the Philippines </font><br/> -->
+                                    <!-- <font style="color: green;"> Department of Environment and Natural Resources </font><br/> -->
+                                    <!-- <font style="color: green;"> Provincial Environment and Natural Resources Office </font><br/> -->
+                                    <!-- <font style="color: #09C;"> Boac, Marinduque </font> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
 
-                            <hr style="height: 5px; background-color: purple;"/>
+                            <!-- <hr style="height: 5px; background-color: purple;"/> -->
+                            <center><img src="{{URL::asset('/img/header2.png')}}" width="50%" /></center>
+                            <div style="border: 2px solid #993366; height: 5;"></div><br>
                             <font style="font-weight: bold; font-size: 16px;">DOCUMENT REPORT</font><br/>
                             <font style="font-weight: 100; font-size: 14px;">{{$doc_category}} </font>
                             

@@ -3,6 +3,7 @@
 namespace App\Models\denr;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\denr\DTS_DocLogsModel;
 
 class DTS_DocRecordModel extends Model
 {
@@ -24,4 +25,14 @@ class DTS_DocRecordModel extends Model
     );*/
 
     public $timestamps = false;
+
+    public function doc_log()
+    {
+        return $this->hasOne(DTS_DocLogsModel::class, 'DOC_NO', 'DOC_NO');
+    }
+
+    public function doc_logs()
+    {
+        return $this->hasMany(DTS_DocLogsModel::class, 'DOC_NO', 'DOC_NO');
+    }
 }

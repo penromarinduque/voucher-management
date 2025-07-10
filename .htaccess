@@ -1,0 +1,4 @@
+<IfModule mod_rewrite.c>
+# Disable directory browsing 
+Options -Indexes
+</IfModule>

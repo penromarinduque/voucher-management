@@ -8,6 +8,41 @@
             $(".modal-header #history_title").html(doc_no);
             $('.log-history').remove();
 
+            function computeRunTime(date_1, date_2) {
+                var date1, date2;  
+
+                date1 = new Date(date_1);
+                date2 = new Date(date_2);
+                var res = Math.abs(date1 - date2) / 1000;
+                var days = Math.floor(res / 86400);       
+                var hours = Math.floor(res / 3600) % 24;        
+                var minutes = Math.floor(res / 60) % 60;
+                var seconds = res % 60;
+
+                if(days > 0) {
+                    if(days > 1) { var con_days = days + ' days, '; } 
+                    else if(days == 1) { var con_days = days + ' day, '; }
+                } else if(days == 0) { var con_days = ''; }
+
+                if(hours > 0) {
+                    if(hours > 1) { var con_hours = hours + ' hrs. '; } 
+                    else if(hours == 1) { var con_hours = hours + ' hr. '; }
+                } else if(hours == 0) { var con_hours = ''; }
+
+                if(minutes > 0) {
+                    if(minutes > 1) {
+                        if(hours > 0) { var con_minutes = ' & ' + minutes + ' mins. '; } 
+                        else if(hours == 0) { var con_minutes = minutes + ' mins. '; }
+                    } else if(minutes == 1) {
+                        if(hours > 0) { var con_minutes = ' & ' + minutes + ' min. '; } 
+                        else if(hours == 0) { var con_minutes = minutes + ' min. '; }
+                    }
+                } else if(minutes == 0) { var con_minutes = ''; }
+
+                var time_consumed = con_days + '' + con_hours + '' + con_minutes;
+                return time_consumed;
+            }
+
             $.ajax ({
                 type: "GET",
                 url: "{{ route('ajax.history.logs') }}",
@@ -16,6 +51,7 @@
                 data: { doc_no : doc_no },
                 success: function(data)
                 {
+                    // console.log(data);
                     $header = $('<tr style="background-color:#F0FFF0;">'
                                     +'<td style="width:3%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold;  text-align: center;"><i class="fa fa-bell"></i></td>'
                                     +'<td style="width:14%; font-size: 11px; vertical-align:middle; color: #5B5B5B; text-transform: uppercase;font-weight: bold; padding-left:15px; text-align: left;">Document From</td>'
@@ -49,50 +85,52 @@
                             else if(index.SEEN == 'Y') { var form_stat = 'none'; }
                         } else { var form_stat = 'none'; }
 
-                        if(index.FW_NO == 1) { var sender_class = 'sender_1'; } 
+                        if(index.FW_NO == 1 && data.first_log_id==index.ID) { var sender_class = 'sender_1'; } 
+                        else if(index.FW_NO == 1 && data.first_log_id!=index.ID) { var sender_class = 'sender_'+ no; }
                         else if(index.FW_NO > 1) { var sender_class = 'sender_'+ no; }
 
                         if(index.ACTION_STATUS == 0) { var action_status = ''; } 
                         else if(index.ACTION_STATUS == 1) { var action_status = 'display:none;'; }
 
-                        var date1, date2;  
+                        // var date1, date2;  
 
-                        date1 = new Date(index.REC_DATE_TIME);
-                        date2 = new Date(index.REL_DATE_TIME);
-                        var res = Math.abs(date1 - date2) / 1000;
-                        var days = Math.floor(res / 86400);       
-                        var hours = Math.floor(res / 3600) % 24;        
-                        var minutes = Math.floor(res / 60) % 60;
-                        var seconds = res % 60;
+                        // date1 = new Date(index.REC_DATE_TIME);
+                        // date2 = new Date(index.REL_DATE_TIME);
+                        // var res = Math.abs(date1 - date2) / 1000;
+                        // var days = Math.floor(res / 86400);       
+                        // var hours = Math.floor(res / 3600) % 24;        
+                        // var minutes = Math.floor(res / 60) % 60;
+                        // var seconds = res % 60;
 
-                        if(days > 0) {
-                            if(days > 1) { var con_days = days + ' days, '; } 
-                            else if(days == 1) { var con_days = days + ' day, '; }
-                        } else if(days == 0) { var con_days = ''; }
+                        // if(days > 0) {
+                        //     if(days > 1) { var con_days = days + ' days, '; } 
+                        //     else if(days == 1) { var con_days = days + ' day, '; }
+                        // } else if(days == 0) { var con_days = ''; }
 
-                        if(hours > 0) {
-                            if(hours > 1) { var con_hours = hours + ' hrs. '; } 
-                            else if(hours == 1) { var con_hours = hours + ' hr. '; }
-                        } else if(hours == 0) { var con_hours = ''; }
+                        // if(hours > 0) {
+                        //     if(hours > 1) { var con_hours = hours + ' hrs. '; } 
+                        //     else if(hours == 1) { var con_hours = hours + ' hr. '; }
+                        // } else if(hours == 0) { var con_hours = ''; }
 
-                        if(minutes > 0) {
-                            if(minutes > 1) {
-                                if(hours > 0) { var con_minutes = ' & ' + minutes + ' mins. '; } 
-                                else if(hours == 0) { var con_minutes = minutes + ' mins. '; }
-                            } else if(minutes == 1) {
-                                if(hours > 0) { var con_minutes = ' & ' + minutes + ' min. '; } 
-                                else if(hours == 0) { var con_minutes = minutes + ' min. '; }
-                            }
-                        } else if(minutes == 0) { var con_minutes = ''; }
+                        // if(minutes > 0) {
+                        //     if(minutes > 1) {
+                        //         if(hours > 0) { var con_minutes = ' & ' + minutes + ' mins. '; } 
+                        //         else if(hours == 0) { var con_minutes = minutes + ' mins. '; }
+                        //     } else if(minutes == 1) {
+                        //         if(hours > 0) { var con_minutes = ' & ' + minutes + ' min. '; } 
+                        //         else if(hours == 0) { var con_minutes = minutes + ' min. '; }
+                        //     }
+                        // } else if(minutes == 0) { var con_minutes = ''; }
 
-                        var time_consumed = con_days + '' + con_hours + '' + con_minutes;
+                        // var time_consumed = con_days + '' + con_hours + '' + con_minutes;
+                        var time_consumed = computeRunTime(index.REC_DATE_TIME, index.REL_DATE_TIME);
 
                         ///////////////////////////////////////////////////////////////////////
-
+                        var date_now = new Date(<?php date('Y-m-d H:i:s'); ?>);
                         var new_date1, new_date2;  
 
                         new_date1 = new Date(index.SEEN_DATE_TIME);
-                        new_date2 = new Date(<?php date('Y-m-d H:i:s'); ?>);
+                        new_date2 = new Date(date_now);
                         var new_res = Math.abs(new_date1 - new_date2) / 1000;
                         var new_days = Math.floor(new_res / 86400);       
                         var new_hours = Math.floor(new_res / 3600) % 24;        
@@ -123,6 +161,15 @@
 
                         if(index.DOC_REMARKS != null) { var doc_remarks = index.DOC_REMARKS; } 
                         else { var doc_remarks = ''; }
+
+                        var rcvd_d = '';
+                        var rcvd_t = '';
+                        var rcvd_runtime = '';
+                        if(index.ACTION_STATUS == 0){
+                            rcvd_d = formatDate(index.REL_DATE_TIME);
+                            rcvd_t = formatTime(index.REL_DATE_TIME);
+                            rcvd_runtime = computeRunTime(index.REL_DATE_TIME, date_now);
+                        }
 
                         if(index.SEEN_DATE_TIME != null) {
                             var rec_date = formatDate(index.SEEN_DATE_TIME);
@@ -168,39 +215,46 @@
                                     +'</td>'
                                  +'</tr>'
                                  +'<tr class="log-history" style="background-color:#FFF;'+ action_status +'">'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'
+                                    +'<td rowspan="2" style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;"></td>'
+                                    +'<td rowspan="2" style="text-align:left;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;">'
                                         +'<ul style="padding-left: 20px; margin-bottom: 0px;">'
                                             +'<li>'+ index.to_fname +' '+ index.to_lname +'</li>'
                                         +'</ul>'
                                     +'</td>'
-                                    +'<td style="text-align:left;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;">'+ rec_date +'<br/>'+ rec_time +'</td>'
-                                    +'<td style="text-align:center;padding:4px 7px 4px 7px;vertical-align:middle;font-size:12px;"></td>'
-                                    +'<td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">'+ run_time +'</td>'
-                                    +'<td style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">Pending / No Action Taken</td>'
-                                    +'<td style="padding: 0px; text-align: center; vertical-align: middle;"></td>'
+                                    +'<td rowspan="2" style="text-align:left;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;"></td>'
+                                    +'<td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;">'+ rcvd_d +'<br/>'+ rcvd_t +'</td>'
+                                    +'<td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;"></td>'
+                                    +'<td style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;">'+ rcvd_runtime +'</td>'
+                                    +'<td rowspan="2" style="text-align:left;padding:7px 7px 7px 15px;vertical-align:middle;font-size:12px;">Pending / No Action Taken</td>'
+                                    +'<td rowspan="2" style="padding: 0px; text-align: center; vertical-align: middle;"></td>'
+                                 +'</tr>'
+                                 +'<tr class="log-history" style="background-color:#FFF;'+ action_status +'">'
+                                    +'<td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;"><b>Viewd on:</b><br>'+ rec_date +'<br/>'+ rec_time +'</td>'
+                                    +'<td style="text-align:center;padding:2px 7px 2px 7px;vertical-align:middle;font-size:12px;"></td>'
+                                    +'<td style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;border-right:1px solid #ddd;">'+ run_time +'</td>'
                                  +'</tr>');
 
                         $('#log_content').append($row);
 
-                        if(index.FW_NO > 1) {
+                        if(index.FW_NO > 1 || (index.FW_NO==1 && (data.first_log_id!=index.ID))) {
                             $('.sender_'+ no).html('<li>'+ index.from_fname +' '+ index.from_lname +'</li>');
                         }
-                    });
 
+                        if (index.FW_NO==1 && data.first_log_id==index.ID) {
+                            $.each(data.doc_sender, function(i,index2) {
 
-                    $.each(data.doc_sender, function(i,index2) {
+                                if(index2.SENDER_TYPE == 'IN') {
+                                    if (true) {}
+                                    $row = $('<li>'+ index2.fname +' '+ index2.lname +'</li>');
+                                } else if(index2.SENDER_TYPE == 'OUT') {
+                                    $row = $('<li>'+ index2.fname +'</li>');
+                                }
 
-                        if(index2.SENDER_TYPE == 'IN') {
-                            $row = $('<li>'+ index2.fname +' '+ index2.lname +'</li>');
-                        } else if(index2.SENDER_TYPE == 'OUT') {
-                            $row = $('<li>'+ index2.fname +'</li>');
+                                $('.sender_1').append($row);
+                            });
                         }
 
-                        $('.sender_1').append($row);
                     });
-
 
                     $('.btn-log-attachment').on('click', function() {
                                     

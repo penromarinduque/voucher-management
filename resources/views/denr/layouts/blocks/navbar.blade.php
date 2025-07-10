@@ -90,6 +90,26 @@
                                     @endif
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('dts.document.index', ['id' => 'acted']) }}">
+                                    <i class="fa fa-sign-out fa-fw"></i> Acted Document
+                                    @if($acted_notification > 0)
+                                    <div style="width: 17px; height: 17px; background-color: #20C997; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
+                                        {{$acted_notification}}
+                                    </div>
+                                    @endif
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dts.document.index', ['id' => 'completed']) }}">
+                                    <i class="fa fa-sign-out fa-fw"></i> Completed Document
+                                    @if($completed_notification > 0)
+                                    <div style="width: 17px; height: 17px; background-color: #20C997; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
+                                        {{$completed_notification}}
+                                    </div>
+                                    @endif
+                                </a>
+                            </li>
 
                         @endif
 

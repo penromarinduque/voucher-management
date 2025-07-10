@@ -37,6 +37,18 @@ $user_role = $user->user_role;
                 <li @if($category == 'OUT') class="active" @endif >
                     <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
                 </li>
+                <li @if($category == 'ACTED') class="active" @endif>
+                    <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
+                </li>
+                <li @if($category == 'COMPLETED') class="active" @endif>
+                    <a href="{{ route('dts.document.index', ['id' => 'completed']) }}"><i class="fa fa-check-square fa-fw"></i> Completed</a>
+                </li>
+                {{-- <li @if($category == 'ACTED') class="active" @endif>
+                    <a href="{{ route('dts.document.acted') }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
+                </li>
+                <li @if($category == 'COMPLETED') class="active" @endif>
+                    <a href="{{ route('dts.document.completed') }}"><i class="fa fa-check-square fa-fw"></i> Completed</a>
+                </li> --}}
                 @if($user_role != '4')
                 <li>
                     <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>

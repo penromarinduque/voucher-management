@@ -13,12 +13,15 @@
                                             +'<option value="{{$addresee_item->id}}">{{$addresee_item->fname}} {{$addresee_item->lname}}</option>'
                                         @endforeach
                                     +'</select>'
-                                    +'<select class="form-control" name="doc_action[]" style="height: 33px; float:left; width:50%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Action to be Taken">'
+                                    +'<select class="form-control" name="doc_action[]" style="height: 33px; float:left; width:50%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Action to be Taken" required>'
                                         +'<option value="">Select Action to be Taken</option>'
                                         @foreach($doc_action as $doc)
                                             +'<option value="{{$doc->ID}}">{{$doc->ACTION}}</option>'
                                         @endforeach
                                     +'</select>'
+                                +'</td>'
+                                +'<td style="width:24%; padding: 0px;">'
+                                    +'<input type="text" class="form-control" name="doc_remarks[]" placeholder="Remarks" style="height: 33px; float: left; width: 100%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Remarks">'
                                 +'</td>'
                                 +'<td style="padding: 0; text-align: center;" colspan="2">'
                                     +'<button class="btn btn-default" type="button" id="btn-remove-addresee" onclick="removeReceiverRow(this)" style=" font-size: 12px; width: 100%; height:33px; color:#F00;"><i class="fa fa-times "></i></button>'

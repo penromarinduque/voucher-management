@@ -11,6 +11,8 @@ $icon_class = helper::icon_class();
 
 $in_notification = helper::in_notification();
 $out_notification = helper::out_notification();
+$acted_notification = helper::acted_notification();
+$completed_notification = helper::completed_notification();
 
 if($path == 'dts') { $module = 'Document Tracking System'; $icon = 'fa fa-truck'; }
 else if($path == 'toa') { $module = 'Travel Order Application'; $icon = 'fa fa-globe'; }

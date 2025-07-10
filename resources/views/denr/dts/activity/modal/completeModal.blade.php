@@ -9,6 +9,7 @@
                 <div class="modal-body" style="padding: 30px 25px 30px 25px; text-align: center;">
                     Are you sure you want to end the process of Document ( <b id="com_name"></b> ) ?
                     <textarea name="end_remarks" id="end_remarks" class="form-control" placeholder="Remarks" style="background-color: #FFF; height: 100px; font-size: 12px; border-radius: 0px; margin-top: 20px;"></textarea>
+                    <input type="hidden" id="doc_log_id" name="doc_log_id" value="" />
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" id="com_id" name="com_id" value="" />

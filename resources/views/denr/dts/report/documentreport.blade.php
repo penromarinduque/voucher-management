@@ -71,6 +71,8 @@
                                                 <option value="">All</option>
                                                 <option value="S">Simple</option>
                                                 <option value="C"> Complex</option>
+                                                <option value="HT"> Highly Technical </option>
+                                                <option value="HT(MSP)"> Highly Technical (Multi-Stage Processing) </option>
                                             </select>
                                         </td>
                                     </tr>

@@ -84,7 +84,17 @@
                                             <td style="padding: 3px 10px 3px 10px; ">{{$col['ORIGIN_OFFICE']}}</td>
                                             <td style="padding: 3px 10px 3px 10px; ">{{$col['DOC_ADDRESS']}}</td>
                                             <td style="padding: 3px 10px 3px 10px; ">{{$col['DOC_SUBJ']}}</td>
-                                            <td style="padding: 3px 10px 3px 10px; ">@if($col['DOC_CLASSIFICATION'] == 'S') Simple @elseif($col['DOC_CLASSIFICATION'] == 'C') Complex @endif</td>
+                                            <td style="padding: 3px 10px 3px 10px; ">
+                                                @if($col['DOC_CLASSIFICATION'] == 'S') 
+                                                    Simple 
+                                                @elseif($col['DOC_CLASSIFICATION'] == 'C') 
+                                                    Complex 
+                                                @elseif($col['DOC_CLASSIFICATION'] == 'HT')
+                                                    Highly Technical
+                                                @elseif($col['DOC_CLASSIFICATION'] == 'HT(MSP)')
+                                                    Highly Technical (Multi-Stage Processing)
+                                                @endif
+                                            </td>
                                             <td style="padding: 3px 10px 3px 10px; ">@if($col['DOC_URGENT'] == 'Y') Yes @elseif($col['DOC_URGENT'] == 'N') No @endif</td>
                                             <td style="padding: 3px 10px 3px 10px; ">@if($col['SIGNED'] == 'Y') Yes @elseif($col['SIGNED'] == 'N') No @endif</td>
                                             <td style="padding: 3px 10px 3px 10px; ">{{$col['REMARKS']}}</td>

@@ -175,14 +175,14 @@ $user_role = $user->user_role;
                                                 </tr>
 
                                                 <tr>
-                                                    <td style="font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; ">Classification :</td>
+                                                    <td style="font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Classification :</td>
                                                     <td style="padding: 0px;">
                                 <!-- CLASSIFICATION --> <select class="form-control" type="text" name='doc_classification' style="height: 33px; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Classification" required>
                                                             <option value=""> Select Classification</option>
                                                             <option value="S"> Simple </option>
                                                             <option value="C"> Complex </option>
-                                                            {{-- <option value="HT"> Highly Technical </option>
-                                                            <option value="HT(MSP)"> Highly Technical (Multi-Stage Processing) </option> --}}
+                                                            <option value="HT"> Highly Technical </option>
+                                                            <option value="HT(MSP)"> Highly Technical (Multi-Stage Processing) </option>
                                                         </select>
                                                     </td>
                                                     <td style="font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "> Is this Urgent ?</td>

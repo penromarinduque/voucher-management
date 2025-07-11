@@ -222,6 +222,8 @@ $user_role = $user->user_role;
                                          <select disabled class="form-control" type="text" name='doc_classification' style="background-color: #FFF; height: 33px; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Classification">
                                             <option value="S" @if($documents['DOC_CLASSIFICATION'] == 'S') selected @endif>Simple </option>
                                             <option value="C" @if($documents['DOC_CLASSIFICATION'] == 'C') selected @endif> Complex </option>
+                                            <option value="HT" @if($documents['DOC_CLASSIFICATION'] == 'HT') selected @endif> Highly Technical </option>
+                                            <option value="HT(MSP)" @if($documents['DOC_CLASSIFICATION'] == 'HT(MSP)') selected @endif> Highly Technical (Multi-Stage Processing) </option>
                                         </select>
                                     </td>
                                     <td style="font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Is this Urgent ?</td> 

@@ -1,0 +1,56 @@
+# version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: denr
+    container_name: denr
+    restart: unless-stopped
+    working_dir: /var/www/denr
+    volumes:
+      - ./:/var/www/denr
+      - ./.env:/var/www/denr/.env
+    environment:
+      - APP_ENV=local
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: denr-nginx
+    ports:
+      - "8002:80"
+    volumes:
+      - ./:/var/www/denr
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  db:
+    platform: linux/x86_64 #this line is optional if you are using Mac Silicon chip (M1/M2/M3)
+    image: mariadb:latest
+    container_name: denr-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3308:3308"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local

@@ -30,11 +30,10 @@
 
                         @php 
 
-                            $my_log = DB::table('dts_document_logs')->where('DOC_NO','=', $record->DOC_NO)->where('DOC_TO','=', $user->id)->count();
-                            $seen_log = DB::table('dts_document_logs')->where('DOC_NO','=', $record->DOC_NO)->where('DOC_TO','=', $user->id)->where('SEEN','=', 'N')->count();
-                            $encoded = DB::table('users')->where('id','=', $record->CREATED_BY)->first();
-
-                            $for_end = DB::table('dts_document_logs')->where('DOC_NO','=', $record->DOC_NO)->orderBy('REL_DATE_TIME','DESC')->first();
+                            $my_log = $record->doc_logs->where('DOC_NO','=', $record->DOC_NO)->where('DOC_TO','=', $user->id)->count();
+                            $seen_log = $record->doc_logs->where('DOC_NO','=', $record->DOC_NO)->where('DOC_TO','=', $user->id)->where('SEEN','=', 'N')->count();
+                            $encoded = $record->created_by;
+                            $for_end = $record->doc_logs->where('DOC_NO','=', $record->DOC_NO)->first();
                             
                             if($my_log  > 0) {
                                 if($seen_log == 0) {
@@ -99,7 +98,7 @@
     </div> 
 </div>
 
-<div style="float: right; bottom: 0; margin-right: 3px;" class="def-link">{!! $documents->links(); !!}</div>
+<div style="float: right; bottom: 0; margin-right: 3px;" class="def-link">{!! $documents->links(); !!} </div>
 
 @include('denr.dts.activity.script.jScriptHistoryLog')
 @include('denr.dts.activity.script.jScriptAttachment')

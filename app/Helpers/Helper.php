@@ -178,85 +178,28 @@ class Helper
     {
         $user = Auth::user();
 
-        // $seen_log = DocumentLogsModel::where('DOC_TO','=', $user->id)->where('DOC_CATEGORY','=', 'IN')->where('SEEN','=', 'N')->count();
-        // $seen_log = DocumentLogsModel::select('DOC_NO')
-        // ->where('DOC_TO', $user->id)
-        // ->where('DOC_CATEGORY', 'IN')
-        // ->where('ACTION_STATUS', 0)
-        // ->count();
-        // return $seen_log;
-
-        // $completed_doc_ids = DocumentLogsModel::select('DOC_NO')
-        // ->where([
-        //         'ACTION_TO_BE_TAKEN' => 14,
-        //         'DOC_TO' => $user->id
-        //     ])
-        // ->distinct('DOC_NO')->get();
-
-        // $acted_doc_ids = DocumentLogsModel::select('DOC_NO')
-        // ->where([
-        //         'ACTION_STATUS' => 1,
-        //         'DOC_TO' => $user->id
-        // ])
-        // ->whereNotIn('DOC_NO', $completed_doc_ids->pluck('DOC_NO')->toArray())
-        // ->distinct('DOC_NO')->get();
-
-        $incoming_doc_ids = DocumentLogsModel::select('DOC_NO')
+        return DocumentModel::query()
+        ->leftJoin('dts_document_logs', 'dts_document_record.DOC_NO', '=', 'dts_document_logs.DOC_NO')
         ->where([
-                'ACTION_STATUS' => 0,
-                'DOC_TO' => $user->id,
-                'DOC_CATEGORY' => "IN"
+                'dts_document_logs.ACTION_STATUS' => 0,
+                'dts_document_logs.DOC_TO' => $user->id,
+                'dts_document_logs.DOC_CATEGORY' => "IN"
         ])
-        // ->whereNotIn('DOC_NO', array_merge($acted_doc_ids->pluck('DOC_NO')->toArray(), $completed_doc_ids->pluck('DOC_NO')->toArray()))
-        ->distinct('DOC_NO')->get();
-
-        return $incoming_doc_ids->count();
+        ->count();
     }
 
     public static function out_notification()
     {
         $user = Auth::user();
 
-        // $seen_log = DocumentLogsModel::where('DOC_TO','=', $user->id)->where('DOC_CATEGORY','=', 'OUT')->where('SEEN','=', 'N')->count();
-        // $valid_doc1 = DTS_DocRecordModel::select('DOC_NO')
-        //         ->where('CREATED_BY', '=', $user->id)
-        //         ->where('DOC_CATEGORY', '=', "OUT")
-        //         ->distinct('DOC_NO')
-        //         ->pluck(`DOC_NO`);
-        
-        // $valid_doc2 = DocumentLogsModel::select('DOC_NO')
-        //         ->where('DOC_TO', '=', $user->id)
-        //         ->where('DOC_CATEGORY', '=', "OUT")
-        //         ->where('ACTION_STATUS', 0)
-        //         ->distinct();
-        // return $valid_doc2->count();
-        // return $valid_doc1->union($valid_doc2)->pluck(`DOC_NO`)->unique()->count();
-
-        // $completed_doc_ids = DocumentLogsModel::select('DOC_NO')
-        // ->where([
-        //         'ACTION_TO_BE_TAKEN' => 14,
-        //         'DOC_TO' => $user->id
-        //     ])
-        // ->distinct('DOC_NO')->get();
-
-        // $acted_doc_ids = DocumentLogsModel::select('DOC_NO')
-        // ->where([
-        //         'ACTION_STATUS' => 1,
-        //         'DOC_TO' => $user->id
-        // ])
-        // ->whereNotIn('DOC_NO', $completed_doc_ids->pluck('DOC_NO')->toArray())
-        // ->distinct('DOC_NO')->get();
-
-        $outgoing_doc_ids = DocumentLogsModel::select('DOC_NO')
+        return DocumentModel::query()
+        ->leftJoin('dts_document_logs', 'dts_document_record.DOC_NO', '=', 'dts_document_logs.DOC_NO')
         ->where([
-                'ACTION_STATUS' => 0,
-                'DOC_TO' => $user->id,
-                'DOC_CATEGORY' => 'OUT'
+                'dts_document_logs.ACTION_STATUS' => 0,
+                'dts_document_logs.DOC_TO' => $user->id,
+                'dts_document_logs.DOC_CATEGORY' => "OUT"
         ])
-        // ->whereNotIn('DOC_NO', array_merge($acted_doc_ids->pluck('DOC_NO')->toArray(), $completed_doc_ids->pluck('DOC_NO')->toArray()))
-        ->distinct('DOC_NO')->get();
-
-        return $outgoing_doc_ids->count();
+        ->count();
     }
 
 
@@ -264,125 +207,100 @@ class Helper
     {
         $user = Auth::user();
 
-        // logs or docs that has action status of 1
-        // complete logs or docs
-
-        // acted
-        // return count
-
-        // $seen_log = DocumentLogsModel::select('DOC_NO')
-        // ->where('DOC_TO', $user->id)
-        // ->where('ACTION_STATUS', 1)
-        // ->where('ACTION_TO_BE_TAKEN', 14)
-        // ->groupBy('DOC_NO')
-        // ->distinct()
-        // ->get();
-
-        $ongoing_doc_ids = DocumentLogsModel::select('DOC_NO')
-            ->where([
-                'ACTION_STATUS' => 0,
-                'DOC_TO' => $user->id,
-                'DOC_CATEGORY' => "OUT"
-            ])
-            // ->whereNotIn('DOC_NO', $excluded_doc_ids)
-            ->distinct()
-            ->get();
-
-        $incoming_doc_ids = DocumentLogsModel::select('DOC_NO')
-            ->where([
-                'ACTION_STATUS' => 0,
-                'DOC_TO' => $user->id,
-                'DOC_CATEGORY' => "IN"
-            ])
-            // ->whereNotIn('DOC_NO', $excluded_doc_ids)
-            ->distinct()
-            ->get();
-
-        $completed_doc_ids = DocumentLogsModel::select('DOC_NO')
-        ->where([
-                'ACTION_TO_BE_TAKEN' => 14,
-                'DOC_TO' => $user->id
-            ])
-        ->orWhere([
-                'ACTION_TO_BE_TAKEN' => 14,
-                'DOC_FROM' => $user->id
-            ])
-        ->whereNotIn('DOC_NO', array_merge($incoming_doc_ids->pluck('DOC_NO')->toArray(), $ongoing_doc_ids->pluck('DOC_NO')->toArray()))
-        ->distinct('DOC_NO')->get();
-
-        $acted_doc_ids = DocumentLogsModel::select('DOC_NO')
-        ->where([
-                'ACTION_STATUS' => 1,
-                'DOC_TO' => $user->id
-        ])
-        ->orWhere([
-                'ACTION_STATUS' => 1,
-                'DOC_FROM' => $user->id
-        ])
-        ->orWhere([
-            'ACTION_STATUS' => 0,
-            'DOC_FROM' => $user->id
-        ])
-        ->whereNotIn('DOC_NO', array_merge($completed_doc_ids->pluck('DOC_NO')->toArray(), $ongoing_doc_ids->pluck('DOC_NO')->toArray(), $incoming_doc_ids->pluck('DOC_NO')->toArray()))
-        ->distinct('DOC_NO')->get();
-
-        return $acted_doc_ids->count();
+        return DocumentModel::query()
+        ->select('dts_document_record.DOC_NO')
+        ->leftJoin('dts_document_logs', 'dts_document_record.DOC_NO', '=', 'dts_document_logs.DOC_NO')
+        ->where(function ($q) use ($user) {
+            $q->where('dts_document_logs.ACTION_STATUS', 1)
+            ->where(function ($q) use ($user) {
+                $q->where('dts_document_logs.DOC_TO', $user->id)
+                    ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+            });
+        })
+        ->orWhere(function ($q) use ($user) {
+            $q->where('dts_document_logs.ACTION_STATUS', 0)
+            ->where('dts_document_logs.DOC_FROM', $user->id);
+        })
+        ->whereNotIn('dts_document_logs.DOC_NO', function ($query) use ($user) {
+            $query->select('dts_document_logs.DOC_NO')
+                ->from(with(new DocumentLogsModel)->getTable())
+                ->where(function ($q) use ($user) {
+                    $q->where(function ($q) use ($user) {
+                        $q->where('dts_document_logs.ACTION_TO_BE_TAKEN', 14)
+                            ->where(function ($q) use ($user) {
+                                $q->where('dts_document_logs.DOC_TO', $user->id)
+                                ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+                            });
+                    })->orWhere(function ($q) use ($user) {
+                        $q->where('dts_document_logs.ACTION_STATUS', 0)
+                            ->where('dts_document_logs.DOC_TO', $user->id)
+                            ->whereIn('dts_document_logs.DOC_CATEGORY', ['OUT', 'IN']);
+                    });
+                });
+        })
+        ->distinct()
+        ->count('dts_document_record.DOC_NO');
+        // return DocumentModel::query()
+        // ->select('dts_document_record.DOC_NO')
+        // ->leftJoin('dts_document_logs', 'dts_document_record.DOC_NO', '=', 'dts_document_logs.DOC_NO')
+        // ->where(function ($q) use ($user) {
+        //         $q->where(function ($q) use ($user) {
+        //             $q->where('dts_document_logs.ACTION_STATUS', 1)
+        //                 ->where(function ($q) use ($user) {
+        //                     $q->where('dts_document_logs.DOC_TO', $user->id)
+        //                         ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+        //                 });
+        //         })
+        //         ->orWhere(function ($q) use ($user) {
+        //             $q->where('dts_document_logs.ACTION_STATUS', 0)
+        //                 ->where('dts_document_logs.DOC_FROM', $user->id);
+        //         });
+        //     })
+        //     ->whereNotIn('dts_document_logs.DOC_NO', function ($query) use ($user) {
+        //         $query->select('dts_document_logs.DOC_NO')
+        //             ->from(with(new DocumentLogsModel)->getTable())
+        //             ->where(function ($q) use ($user) {
+        //                 $q->where(function ($q) use ($user) {
+        //                     $q->where('dts_document_logs.ACTION_TO_BE_TAKEN', 14)
+        //                         ->where(function ($q) use ($user) {
+        //                             $q->where('dts_document_logs.DOC_TO', $user->id)
+        //                                 ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+        //                         });
+        //                 })->orWhere(function ($q) use ($user) {
+        //                     $q->where('dts_document_logs.ACTION_STATUS', 0)
+        //                         ->where('dts_document_logs.DOC_TO', $user->id)
+        //                         ->whereIn('dts_document_logs.DOC_CATEGORY', ['OUT', 'IN']);
+        //                 });
+        //             });
+        //     })
+        //     ->distinct()
+        //     ->count('dts_document_record.DOC_NO');
     }
+
 
     public static function completed_notification()
     {
         $user = Auth::user();
 
-        // $valid_doc1 = DTS_DocRecordModel::select('DOC_NO')
-        // ->where('CREATED_BY', '=', $user->id)
-        // ->where('STATUS', '=', "C")
-        // ->distinct('DOC_NO')
-        // ->get()
-        // ->pluck("DOC_NO");
-        // $valid_doc2 = DocumentLogsModel::select('DOC_NO')
-        // ->whereNotIn('DOC_NO', $valid_doc1)
-        // ->where('ACTION_STATUS', 1)
-        // ->where('DOC_TO', $user->id)
-        // ->where('ACTION_TO_BE_TAKEN', 14)
-        // ->distinct('DOC_NO')
-        // ->get()
-        // ->pluck("DOC_NO");
-        // return $valid_doc2->count() + $valid_doc1->count();
-        // return $valid_doc1->union($valid_doc2)->get()->count();
-
-        $ongoing_doc_ids = DocumentLogsModel::select('DOC_NO')
-            ->where([
-                'ACTION_STATUS' => 0,
-                'DOC_TO' => $user->id,
-                'DOC_CATEGORY' => "OUT"
-            ])
-            // ->whereNotIn('DOC_NO', $excluded_doc_ids)
+        $completed_doc_ids_count = DocumentLogsModel::select('DOC_NO')
+            ->where(function ($q) use ($user) {
+                $q->where('ACTION_TO_BE_TAKEN', 14)
+                ->where(function ($q) use ($user) {
+                    $q->where('DOC_TO', $user->id)
+                        ->orWhere('DOC_FROM', $user->id);
+                });
+            })
+            ->whereNotIn('DOC_NO', function ($sub) use ($user) {
+                $sub->select('DOC_NO')
+                    ->from((new DocumentLogsModel)->getTable())
+                    ->where('ACTION_STATUS', 0)
+                    ->where('DOC_TO', $user->id)
+                    ->whereIn('DOC_CATEGORY', ['OUT', 'IN']);
+            })
             ->distinct()
-            ->get();
+            ->count('DOC_NO');
 
-        $incoming_doc_ids = DocumentLogsModel::select('DOC_NO')
-        ->where([
-            'ACTION_STATUS' => 0,
-            'DOC_TO' => $user->id,
-            'DOC_CATEGORY' => "IN"
-        ])
-        // ->whereNotIn('DOC_NO', $excluded_doc_ids)
-        ->distinct()
-        ->get(); // No need to repeat the query
-
-        $completed_doc_ids = DocumentLogsModel::select('DOC_NO')
-        ->where([
-                'ACTION_TO_BE_TAKEN' => 14,
-                'DOC_TO' => $user->id
-            ])
-        ->orWhere([
-                'ACTION_TO_BE_TAKEN' => 14,
-                'DOC_FROM' => $user->id
-            ])
-        ->whereNotIn('DOC_NO', array_merge($incoming_doc_ids->pluck('DOC_NO')->toArray(), $ongoing_doc_ids->pluck('DOC_NO')->toArray()))
-        ->distinct('DOC_NO')->get();
-
-        return $completed_doc_ids->count();
+        return $completed_doc_ids_count;
     }
 
     public static function pis_access()

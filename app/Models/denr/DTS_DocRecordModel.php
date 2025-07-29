@@ -35,4 +35,9 @@ class DTS_DocRecordModel extends Model
     {
         return $this->hasMany(DTS_DocLogsModel::class, 'DOC_NO', 'DOC_NO');
     }
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'CREATED_BY');
+    }
 }

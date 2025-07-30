@@ -303,53 +303,53 @@ class Helper
         return $completed_doc_ids_count;
     }
 
-    public static function pis_access()
+    public static function pis_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'PIS')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'PIS')->where('module_access','=', '1')->count();
         return $access;
     }
 
-    public static function toa_access()
+    public static function toa_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'TOA')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'TOA')->where('module_access','=', '1')->count();
         return $access;
     }
 
-    public static function dts_access()
+    public static function dts_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'DTS')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'DTS')->where('module_access','=', '1')->count();
         return $access;
     }
 
-    public static function lms_access()
+    public static function lms_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'LMS')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'LMS')->where('module_access','=', '1')->count();
         return $access;
     }
 
-    public static function fsa_access()
+    public static function fsa_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'FSA')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'FSA')->where('module_access','=', '1')->count();
         return $access;
     }
 
-    public static function app_access()
+    public static function app_access($user_module_accesses)
     {
         $user = Auth::user();
-        $access = UserModuleAccessModel::where('user','=', $user->id)->where('module_code','=', 'APP')->where('module_access','=', '1')->count();
+        $access = $user_module_accesses->where('module_code','=', 'APP')->where('module_access','=', '1')->count();
         return $access;
     }
 
 
-    public static function user_access($process, $type)
+    public static function user_access($process, $type, $userAccess)
     {
         $user = Auth::user();
-        $access = UserAccessModel::where('user','=', $user->id)->where('window_id','=', $process)->where($type,'=', '1')->count();
+        $access = $userAccess->where('window_id','=', $process)->where($type,'=', '1')->count();
         return $access;
     }
 

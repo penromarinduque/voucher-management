@@ -44,4 +44,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function userAccesses()
+    {
+        return $this->hasMany(APP_UserAccess::class, 'user', 'id');
+    }
+
+    public function userModuleAccesses()
+    {
+        return $this->hasMany(APP_UserModuleAccess::class, 'user', 'id');
+    }
 }

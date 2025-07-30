@@ -27,6 +27,7 @@ use App\Models\denr\DTS_DocActionModel as DocActionModel;
 use App\Models\denr\User as UserModel;
 use App\Models\denr\Form_Signatory as FormSignatoryModel;
 use App\Models\denr\Form_No as FormNoModel;
+use Illuminate\Support\Facades\Log;
 
 trait DocumentTrackingTrait
 {
@@ -126,7 +127,12 @@ trait DocumentTrackingTrait
         $query->leftJoin('dts_document_types', 'dts_document_record.DOC_TYPE', '=', 'dts_document_types.ID');
         $query->select('dts_document_record.*', 'dts_document_types.TYPE_NAME');
 
+        
+        $this->filterDocuments($request, $query);
+        $this->getDocumentsByCategory($category, $query, $user);
+
         if($search_doc) {
+            Log::info('search_doc: '.$search_doc);
             $query->where(function($subquery) use ($search_doc) {
                 $subquery->where('dts_document_record.DOC_NO', 'LIKE', '%'.$search_doc.'%')
                          ->orWhere('dts_document_record.CONTROL_CODE', 'LIKE', '%'.$search_doc.'%')
@@ -136,9 +142,6 @@ trait DocumentTrackingTrait
                          ->orWhere('dts_document_record.REMARKS', 'LIKE', '%'.$search_doc.'%');
             });
         }
-
-        $this->filterDocuments($request, $query);
-        $this->getDocumentsByCategory($category, $query, $user);
 
 
         $data = $query
@@ -178,15 +181,17 @@ trait DocumentTrackingTrait
         }
         if($category == 'ACTED') {
             $query->where(function ($q) use ($user) {
-                $q->where('dts_document_logs.ACTION_STATUS', 1)
-                ->where(function ($q) use ($user) {
-                    $q->where('dts_document_logs.DOC_TO', $user->id)
-                        ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+                $q->where(function($q) use ($user) {
+                    $q->where('dts_document_logs.ACTION_STATUS', 1)
+                    ->where(function ($q) use ($user) {
+                        $q->where('dts_document_logs.DOC_TO', $user->id)
+                            ->orWhere('dts_document_logs.DOC_FROM', $user->id);
+                    });
+                })
+                ->orWhere(function ($q) use ($user) {
+                    $q->where('dts_document_logs.ACTION_STATUS', 0)
+                    ->where('dts_document_logs.DOC_FROM', $user->id);
                 });
-            })
-            ->orWhere(function ($q) use ($user) {
-                $q->where('dts_document_logs.ACTION_STATUS', 0)
-                ->where('dts_document_logs.DOC_FROM', $user->id);
             })
             ->whereNotIn('dts_document_logs.DOC_NO', function ($query) use ($user) {
                 $query->select('dts_document_logs.DOC_NO')
@@ -205,6 +210,7 @@ trait DocumentTrackingTrait
                         });
                     });
             });
+            Log::info('Query : '.$query->toSql());
 
         }
         if($category == 'COMPLETED') {

@@ -38,3 +38,8 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+
+## Procedures on on migrating database
+1. Add new record to form_no table id: 4, form_name: Voucher, form_text: 2025-, form_no: 000001
+2. Add new record to dts_action_to_be_taken ID: 39, ACTION: Copy Furnish 
+3. 

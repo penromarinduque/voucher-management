@@ -204,8 +204,7 @@ trait DocumentTrackingTrait
                                 });
                         })->orWhere(function ($q) use ($user) {
                             $q->where('dts_document_logs.ACTION_STATUS', 0)
-                                ->where('dts_document_logs.DOC_TO', $user->id)
-                                ->whereIn('dts_document_logs.DOC_CATEGORY', ['OUT', 'IN']);
+                                ->where('dts_document_logs.DOC_TO', $user->id);
                         });
                     });
             });
@@ -227,8 +226,7 @@ trait DocumentTrackingTrait
                     $q
                     ->orWhere(function ($q) use ($user) {
                         $q->where('dts_document_logs.ACTION_STATUS', 0)
-                            ->where('dts_document_logs.DOC_TO', $user->id)
-                            ->whereIn('dts_document_logs.DOC_CATEGORY', ['OUT', 'IN']);
+                            ->where('dts_document_logs.DOC_TO', $user->id);
                     });
                 });
             });
@@ -245,9 +243,9 @@ trait DocumentTrackingTrait
         return $cat_desc;
     }
 
-    public function toIndex(Request $request){
+    public function toIndex(Request $request, $id){
         
-        $category = "PENDING";
+        $category = strtoupper($id);
         $documents = $this->getDocuments($request, $category);
         $doc_count = count($documents);
         $cat_desc = $this->getCategory($category);

@@ -20,7 +20,7 @@ Route::group(['middleware' => 'auth'],function() {
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 	//INDEX
-	Route::get('/dts/activity/document/index', 'denr\dts\activity\DocumentTrackingController@index')->name('dts.document.index');
+	Route::get('/dts/activity/document/index/{id}', 'denr\dts\activity\DocumentTrackingController@index')->name('dts.document.index');
 
 	//PAGE
     Route::get('/dts/activity/document/page', 'denr\dts\activity\DocumentTrackingController@page')->name('dts.document.page');

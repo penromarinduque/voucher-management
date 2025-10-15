@@ -30,12 +30,12 @@
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Incoming Document</div>
+                                <div style=" font-size: 20px;">Documents</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-8" style="font-size: 40px;">
-                                <i class="fa fa-download"></i>
+                                <i class="fa fa-file"></i>
                             </div>
                             @if($in_notification > 0)
                             <div class="col-xs-2" style="font-size: 18px; float: right; font-weight: bold; width: 40px; height: 40px; border-radius: 50px; background-color: #A2CD5A; color: #FFF; padding: 8px; text-align: center; margin-top: 5px; margin-right: 20px;">
@@ -45,39 +45,6 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 14px;">Activity</div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-    @endif
-
-    @if($dts_access1 > 0)
-
-        <div class="col-lg-3" style="padding:10px;">
-            <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #A2CD5A; border-radius: 0px;  margin: 0px;">
-                <a href="{{ route('dts.document.index', ['id' => 'out']) }}" >
-                    <div class="panel-heading" style="color: #FFF; text-align: left;">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Outgoing Document</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-8" style="font-size: 40px;">
-                                <i class="fa fa-upload"></i>
-                            </div>
-                            @if($out_notification > 0)
-                            <div class="col-xs-2" style="font-size: 18px; float: right; font-weight: bold; width: 40px; height: 40px; border-radius: 50px; background-color: #009ACD; color: #FFF; padding: 8px; text-align: center; margin-top: 5px; margin-right: 20px;">
-                                {{$out_notification}}
-                            </div>
-                            @endif
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-9">
                                 <div style=" font-size: 14px;">Activity</div>
                             </div>
                         </div>
@@ -129,7 +96,7 @@
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Completed Document</div>
+                                <div style=" font-size: 20px;">Completed </div>
                             </div>
                         </div>
                         <div class="row">
@@ -250,6 +217,9 @@
 
 </div>
 
-@include('denr.my_account.dashboard_myaccount')
-
+<div class="row">
+    <div class="col-md-12" style="padding: 10px">
+        @include('denr.my_account.dashboard_myaccount')
+    </div>
+</div>
 @endsection

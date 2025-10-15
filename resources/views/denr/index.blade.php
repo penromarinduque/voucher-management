@@ -28,7 +28,7 @@
 
     <div class="col-md-12" style="padding: 0px 5px 0px 5px;">
 
-    @if($pis_access > 0)
+    {{-- @if($pis_access > 0)
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #A2CD5A; border-radius: 0px;  margin: 0px; ">
@@ -54,9 +54,9 @@
             </div>
         </div>
 
-    @endif
+    @endif --}}
 
-    @if($toa_access > 0)
+    {{-- @if($toa_access > 0)
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #009ACD; border-radius: 0px;  margin: 0px;">
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-    @endif
+    @endif --}}
 
     @if($dts_access > 0)
 
@@ -112,7 +112,7 @@
 
     @endif
 
-    @if($lms_access > 0)
+    {{-- @if($lms_access > 0)
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #AB82FF; border-radius: 0px;  margin: 0px;">
@@ -138,13 +138,13 @@
             </div>
         </div>
 
-    @endif
+    @endif --}}
 
     </div>
 
     <div class="col-md-12" style="padding: 0px 5px 0px 5px;">
 
-    @if($fsa_access > 0)
+    {{-- @if($fsa_access > 0)
 
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #DB7093; border-radius: 0px;  margin: 0px;">
@@ -170,7 +170,7 @@
             </div>
         </div>
 
-    @endif
+    @endif --}}
 
     @if($user->user_type == 1)
 

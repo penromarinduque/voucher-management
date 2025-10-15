@@ -31,11 +31,8 @@ $user_role = $user->user_role;
     <div class="col-lg-12">
         <div class="panel panel-default" style="padding-top: 12px;">
             <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
-                <li @if($category == 'IN') class="active" @endif style="margin-left: 12px;">
-                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
-                </li>
-                <li @if($category == 'OUT') class="active" @endif >
-                    <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
+                <li @if($category == 'PENDING') class="active" @endif style="margin-left: 12px;">
+                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
                 </li>
                 <li @if($category == 'ACTED') class="active" @endif>
                     <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>

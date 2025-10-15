@@ -34,11 +34,7 @@ $user_role = $user->user_role;
                         <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                             <li style="margin-left: 12px;">
-                                <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
+                                <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
                             </li>
                             <li>
                                 <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
@@ -81,9 +77,26 @@ $user_role = $user->user_role;
 
                                             <table class="table table-striped table-bordered table-hover tooltip-demo">
                                                 <tr>
-                                                    <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; "><font style="color: #F00;">*</font> DOC. CATEGORY</td>
+                                                    <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Document Type :</td>
+                                                    
+                                                    @php $doc_type_list = DB::table('dts_document_types')->orderBy('TYPE_NAME', 'ASC')->get(); @endphp
+                                                    
+                                                    <td style="padding: 0px;" colspan="3">
+                                                        <!-- DOC TYPE -->   
+                                                        <select class="form-control" name="doc_type" style="height: 33px; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Documet Type" required>
+                                                            <option value=''> Select Document Type </option>
+                                                            @foreach(collect($doc_type_list)->whereIn('ID', [16]) as $doc_type_item)
+                                                                <option value="{{$doc_type_item->ID}}" {{$doc_type_item->ID == 16 ? 'selected' : ''}}>{{$doc_type_item->TYPE_NAME}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+
+                                                    {{-- <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; ">
+                                                        <font style="color: #F00;">*</font> DOC. CATEGORY
+                                                    </td>
                                                     <td style="width:35%; padding: 0px;">
-                                    <!-- DOC CAT -->    <select class="form-control" name='doc_cat' id='doc_cat' style="height: 33px; font-size: 12px; text-transform: uppercase; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Documet Category">
+                                                        <!-- DOC CAT -->    
+                                                        <select class="form-control" name='doc_cat' id='doc_cat' style="height: 33px; font-size: 12px; text-transform: uppercase; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Documet Category">
                                                             @if($user_role == '1')
                                                             <option value="IN">Incoming Document</option>
                                                             @elseif($user_role == '2')
@@ -93,19 +106,7 @@ $user_role = $user->user_role;
                                                             <option value="OUT">Outgoing Document</option>
                                                             @endif
                                                         </select>
-                                                    </td>
-                                                    <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Document Type :</td>
-                                                    
-                                                    @php $doc_type_list = DB::table('dts_document_types')->orderBy('TYPE_NAME', 'ASC')->get(); @endphp
-                                                    
-                                                    <td style="width:35%; padding: 0px;">
-                                    <!-- DOC TYPE -->   <select class="form-control" name="doc_type" style="height: 33px; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Documet Type" required>
-                                                            <option value=''> Select Document Type </option>
-                                                            @foreach($doc_type_list as $doc_type_item)
-                                                                <option value="{{$doc_type_item->ID}}">{{$doc_type_item->TYPE_NAME}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
+                                                    </td> --}}
                                                 </tr>
 
                                                 <tr>

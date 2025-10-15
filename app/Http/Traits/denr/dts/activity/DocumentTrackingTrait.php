@@ -172,11 +172,10 @@ trait DocumentTrackingTrait
 
     function getDocumentsByCategory($category, $query, $user)
     {
-        if (in_array(strtoupper($category), ['IN', 'OUT'])) {
+        if ($category == "PENDING") {
             $query->where([
                 'dts_document_logs.ACTION_STATUS' => 0,
-                'dts_document_logs.DOC_TO' => $user->id,
-                'dts_document_logs.DOC_CATEGORY' => $category
+                'dts_document_logs.DOC_TO' => $user->id
             ]);
         }
         if($category == 'ACTED') {
@@ -242,16 +241,17 @@ trait DocumentTrackingTrait
         else if($category == 'OUT') { $cat_desc = 'Outgoing Documents'; } 
         else if($category == 'COMPLETED') { $cat_desc = 'Completed Documents'; } 
         else if($category == 'ACTED') { $cat_desc = 'Acted Documents'; } 
+        else if($category == 'PENDING') { $cat_desc = 'Documents'; }
         return $cat_desc;
     }
 
-    public function toIndex(Request $request, $id){
+    public function toIndex(Request $request){
         
-        $category = strtoupper($id);
+        $category = "PENDING";
         $documents = $this->getDocuments($request, $category);
         $doc_count = count($documents);
         $cat_desc = $this->getCategory($category);
-        return view('denr.dts.activity.documents', compact(['valid_doc','documents','doc_count','cat_desc','category']));
+        return view('denr.dts.activity.documents', compact(['valid_doc','documents','doc_count', 'category', 'cat_desc']));
     }
 
     public function toPage($request)
@@ -290,7 +290,7 @@ trait DocumentTrackingTrait
         $user = Auth::user();
         $user_id = $user->id;
 
-        $form = FormNoModel::where('id','=','2')->first();
+        $form = FormNoModel::where('id','=','4')->first();
         $doc_action = DocActionModel::where('ID','!=','14')->where('ID','!=','35')->orderBy('ACTION','ASC')->get();
 
         $str = $form->form_no;
@@ -316,7 +316,7 @@ trait DocumentTrackingTrait
         $doc_time = $request->doc_time;
         $date_time_start = $request->date_time_start;
         $doc_type = $request->doc_type;
-        $doc_cat = $request->doc_cat;
+        // $doc_cat = $request->doc_cat;
         $doc_from =  $request->doc_from;
         $sender_type =  $request->sender_type;
         $doc_origin_office = $request->doc_origin_office;
@@ -355,7 +355,6 @@ trait DocumentTrackingTrait
         $DocumentRecord = [
             'DOC_NO' => $doc_no,
             'CONTROL_CODE' => $control_code,
-            'DOC_CATEGORY' => $doc_cat,
             'DOC_TYPE' => $doc_type,
             'DOC_DATE' => $doc_date,
             'DOC_TIME' => $doc_time,
@@ -419,7 +418,6 @@ trait DocumentTrackingTrait
                 'REL_DATE_TIME' => date('Y-m-d H:i:s'),
                 'REC_DATE_TIME' => $request->doc_date_org . ' ' . $request->doc_time_org,
                 'DOC_REMARKS' => $request->input('doc_remarks')[$index],
-                'DOC_CATEGORY' => $doc_cat,
                 'ACTION_TO_BE_TAKEN' => $request->input('doc_action')[$index],
                 'SEEN' => 'N',
                 'SEND_TYPE' => $send_type,

@@ -16,10 +16,10 @@ class DocumentTrackingController extends Controller
 {
     use DocumentTrackingTrait, UserAccessTraits;
 
-    public function index(Request $request, $id)
+    public function index(Request $request)
     {
         if($this->user_access()){
-            return $this->toIndex($request, $id);
+            return $this->toIndex($request);
         } else {
             Session::flash('failed', 'You have no rights to access '.$this->window_desc());
             return back();

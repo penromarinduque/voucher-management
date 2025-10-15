@@ -34,13 +34,8 @@ $user_role = $user->user_role;
     		<ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                 <li style="margin-left: 12px;">
-                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
                 </li>
-
-                <li>
-                    <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
-                </li>
-
                 <li class="active">
                     <a href="{{ route('dts.document.acted') }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
                 </li>

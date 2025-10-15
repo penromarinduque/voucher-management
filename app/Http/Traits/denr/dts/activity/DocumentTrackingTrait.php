@@ -331,11 +331,8 @@ trait DocumentTrackingTrait
         $count_doc = DocRecordModel::where('DOC_NO','=', $request->doc_no)->count();
 
         if($count_doc == 0) {
-            
             $doc_no = $request->doc_no;
-
         } else {
-
             $form = FormNoModel::where('id','=',$request->formid)->first();
             $cur_no = str_pad($form->form_no + 1, strlen($form->form_no), "0", STR_PAD_LEFT);
             
@@ -419,6 +416,7 @@ trait DocumentTrackingTrait
                 'ACTION_TO_BE_TAKEN' => $request->input('doc_action')[$index],
                 'SEEN' => 'N',
                 'SEND_TYPE' => $send_type,
+                'ACTION_STATUS' => $request->input('doc_action')[$index] == 39 ? 1 : 0
             ];
 
             DocLogsModel::insert($document_log);

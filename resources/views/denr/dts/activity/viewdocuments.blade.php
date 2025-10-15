@@ -34,11 +34,7 @@ $user_role = $user->user_role;
             <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                 <li style="margin-left: 12px;">
-                    <a href="{{ route('dts.document.index', ['id' => 'in']) }}"><i class="fa fa-sign-in fa-fw"></i> Incoming Document</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('dts.document.index', ['id' => 'out']) }}"><i class="fa fa-sign-out fa-fw"></i> Outgoing Document</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
                 </li>
                 <li>
                     <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
@@ -465,15 +461,16 @@ $user_role = $user->user_role;
                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">@if($col->ACTION != 13){{$col->ACTION}}@endif</td>
                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{$col->DOC_REMARKS}}</td>
                                         <td style="padding: 0px; text-align: center; vertical-align: middle;">
-                                            @if($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id && $col->ACTION_TO_BE_TAKEN!=35)
-                                            <a href="javascript:void(0)" class="btn-recall2 btn btn-default" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="RECALL" style="font-size: 12px; color: #a30000; border-radius: 2px;"><i class="fa fa-reply"></i></a>
+                                            @if (!$col->ACTION_TO_BE_TAKEN == 39)
+                                                @if($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id && $col->ACTION_TO_BE_TAKEN!=35)
+                                                <a href="javascript:void(0)" class="btn-recall2 btn btn-default" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="RECALL" style="font-size: 12px; color: #a30000; border-radius: 2px;"><i class="fa fa-reply"></i></a>
+                                                @endif
                                             @endif
                                             <a href="javascript:void(0)" class="btn-log-attachment btn btn-default" data-id="{{$col->ID}}" data-id2="{{$col->FW_NO}}" data-id3="{{$col->DOC_NO}}" data-id4="{{$col->DOC_TO}}" data-toggle="tooltip" data-placement="top" title="Attachments" style="font-size: 12px; color: #09C; border-radius: 2px; width: 50%;"><i class="glyphicon glyphicon-paperclip"></i></a>
                                         </td>
                                     </tr>
 
                                     @if($col->ACTION_STATUS == 0)
-
                                         @php
                                             $now = date('m/d/Y H:i:s');
                                             $rcvd_dt = $col->REL_DATE_TIME;
@@ -522,13 +519,16 @@ $user_role = $user->user_role;
                                             <td rowspan="2" style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;"></td>
                                             <td rowspan="2" style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;"></td>
                                             <td rowspan="2" style="padding: 0px; text-align: center; vertical-align: middle;">
-                                                @if($col->DOC_TO == $user->id && $history_logs->where("ACTION_TO_BE_TAKEN", "<>", 14)->where("DOC_TO", $user->id)->count() > 1)
-                                                    <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$col->DOC_NO}}" data-id2="{{$col->DOC_CATEGORY}}" data-log-id="{{$col->ID}}"  data-toggle="tooltip" data-placement="top" title="FORWARD" style="font-size: 12px; color: #09C; border-radius: 2px;"><i class="fa fa-paper-plane"></i></a>
-                                                    <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-log-id="{{$col->ID}}" data-toggle="tooltip" data-placement="top" title="END" style="font-size: 12px; color: #00CD00; border-radius: 2px;"><i class="fa fa-check"></i></a>
+                                                @if (!$col->ACTION_TO_BE_TAKEN == 39)
+                                                    @if($col->DOC_TO == $user->id && $history_logs->where("ACTION_TO_BE_TAKEN", "<>", 14)->where("DOC_TO", $user->id)->count() > 1)
+                                                        <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$col->DOC_NO}}" data-id2="{{$col->DOC_CATEGORY}}" data-log-id="{{$col->ID}}"  data-toggle="tooltip" data-placement="top" title="FORWARD" style="font-size: 12px; color: #09C; border-radius: 2px;"><i class="fa fa-paper-plane"></i></a>
+                                                        <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-log-id="{{$col->ID}}" data-toggle="tooltip" data-placement="top" title="END" style="font-size: 12px; color: #00CD00; border-radius: 2px;"><i class="fa fa-check"></i></a>
+                                                    @endif
+                                                    @if ($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id)
+                                                    <a href="javascript:void(0)" class="btn-followup btn btn-default" data-log-id="{{$col->ID}}" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="FOLLOW UP" style="font-size: 12px; color: #e7b511; border-radius: 2px;"><i class="fa fa-bell"></i></a>
+                                                    @endif
                                                 @endif
-                                                @if ($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id)
-                                                <a href="javascript:void(0)" class="btn-followup btn btn-default" data-log-id="{{$col->ID}}" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="FOLLOW UP" style="font-size: 12px; color: #e7b511; border-radius: 2px;"><i class="fa fa-bell"></i></a>
-                                                @endif
+                                                
                                                 {{-- {{$col}} --}}
                                             </td>
                                         </tr>

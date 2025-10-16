@@ -189,6 +189,19 @@ class Helper
         // ->count();
     }
 
+    public static function pending_notification()
+    {
+        $user = Auth::user();
+
+        return DocumentModel::query()
+        ->leftJoin('dts_document_logs', 'dts_document_record.DOC_NO', '=', 'dts_document_logs.DOC_NO')
+        ->where([
+                'dts_document_logs.ACTION_STATUS' => 0,
+                'dts_document_logs.DOC_TO' => $user->id
+        ])
+        ->count();
+    }
+
     public static function out_notification()
     {
         return 0;

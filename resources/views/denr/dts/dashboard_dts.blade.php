@@ -13,9 +13,7 @@
 <div class="row">
 
     <div class="col-lg-12">
-
         @include('denr.layouts.blocks.msgconfirmation')
-        
     </div>
 
     @include('denr.dashboard_main')
@@ -23,7 +21,6 @@
     <div class="col-md-12" style="padding: 0px 5px 0px 5px;">
 
     @if($dts_access1 > 0)
-
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #009ACD; border-radius: 0px;  margin: 0px; ">
                 <a href="{{ route('dts.document.index', ['id' => 'in']) }}" >
@@ -52,11 +49,9 @@
                 </a>
             </div>
         </div>
-
     @endif
 
     @if($dts_access1 > 0)
-
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #20C997; border-radius: 0px;  margin: 0px;">
                 <a href="{{ route('dts.document.index', ['id' => 'acted']) }}" >
@@ -85,11 +80,9 @@
                 </a>
             </div>
         </div>
-
     @endif
 
     @if($dts_access1 > 0)
-
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #A2CD5A; border-radius: 0px;  margin: 0px;">
                 <a href="{{ route('dts.document.index', ['id' => 'completed']) }}" >
@@ -118,13 +111,10 @@
                 </a>
             </div>
         </div>
-
     @endif
 
     @if($dts_access2 > 0)
-
         @if($user_role != '4')
-
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color:  #00CDCD; border-radius: 0px;  margin: 0px;">
                 <a href="{{ route('dts.document.create') }}" >
@@ -148,9 +138,7 @@
                 </a>
             </div>
         </div>
-
         @endif
-
     @endif
 
     @if($dts_access3 > 0)

@@ -92,7 +92,7 @@
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">DTS</div>
+                                <div style=" font-size: 20px;">Voucher Management</div>
                             </div>
                         </div>
                         <div class="row">
@@ -102,7 +102,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 14px;">Document Tracking System</div>
+                                <div style=" font-size: 14px;">Voucher Management System</div>
                             </div>
                         </div>
                     </div>

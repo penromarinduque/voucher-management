@@ -203,11 +203,9 @@
 
     </div>
 
-</div>
-
-<div class="row">
     <div class="col-md-12" style="padding: 10px">
         @include('denr.my_account.dashboard_myaccount')
     </div>
 </div>
+
 @endsection

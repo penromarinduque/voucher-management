@@ -52,6 +52,9 @@ Route::group(['middleware' => 'auth'],function() {
 	//COMPLETE
 	Route::post('/dts/activity/document/complete', 'denr\dts\activity\DocumentTrackingController@complete')->name('dts.document.complete');
 
+	// PAID
+	Route::post('/dts/activity/document/paid', 'denr\dts\activity\DocumentTrackingController@paid')->name('dts.document.paid');
+
 	//RECALL
 	Route::post('/dts/activity/document/recall', 'denr\dts\activity\DocumentTrackingController@recall')->name('dts.document.recall');
 	Route::post('/dts/activity/document/recallsingle', 'denr\dts\activity\DocumentTrackingController@recallSingle')->name('dts.document.recallsingle');

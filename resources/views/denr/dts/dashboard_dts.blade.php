@@ -23,11 +23,11 @@
     @if($dts_access1 > 0)
         <div class="col-lg-3" style="padding:10px;">
             <div class="panel panel" style="box-shadow: 1px 2px 3px 1px #8F8F8F; background-color: #009ACD; border-radius: 0px;  margin: 0px; ">
-                <a href="{{ route('dts.document.index', ['id' => 'in']) }}" >
+                <a href="{{ route('dts.document.index', ['id' => 'pending']) }}" >
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Documents</div>
+                                <div style=" font-size: 20px;">Vouchers</div>
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +58,7 @@
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Acted Document</div>
+                                <div style=" font-size: 20px;">Acted</div>
                             </div>
                         </div>
                         <div class="row">
@@ -121,7 +121,7 @@
                     <div class="panel-heading" style="color: #FFF; text-align: left;">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div style=" font-size: 20px;">Add Document</div>
+                                <div style=" font-size: 20px;">Add Voucher</div>
                             </div>
                         </div>
                         <div class="row">
@@ -200,12 +200,12 @@
         </div>
 
     @endif
-
-    </div>
-
+    
     <div class="col-md-12" style="padding: 10px">
         @include('denr.my_account.dashboard_myaccount')
     </div>
+</div>
+
 </div>
 
 @endsection

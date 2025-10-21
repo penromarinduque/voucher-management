@@ -1,15 +1,15 @@
 @php
 $user_id = Auth::user()->id;
 @endphp
-<div id="forward_modal" class="modal fade" role="dialog">
+<div id="paid_modal" class="modal fade" role="dialog">
     <div class="modal-dialog" id="mod_id" style="margin-top: 50px; width: 70%;">
         <div class="modal-content">
 
-            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@forward', 'files'=>'true', 'name'=>'form', 'id'=>'form_forward' ))}}
+            {{Form::open(array('action'=>'denr\dts\activity\DocumentTrackingController@paid', 'files'=>'true', 'name'=>'form', 'id'=>'form_paid' ))}}
                 <!-- , 'onsubmit'=>"return confirm('DO YOU REALLY WANT TO SUBMIT THE FORM?');" -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title" style="color: #09C;"><i class="fa fa-send"></i> Forward Voucher (<font id="doc_no_title"></font>)</h5>
+                    <h5 class="modal-title" style="color: #09C;"><i class="fa fa-check-circle" aria-hidden="true"></i> Payment Completed for Voucher (<font id="doc_no_title"></font>)</h5>
                 </div>
                 <div class="modal-body" style="padding: 0px; text-align: center; background-color: #EEE; overflow: auto; height: 550px;"> 
                     <div class="panel-heading" style="padding:20px;">
@@ -26,7 +26,7 @@ $user_id = Auth::user()->id;
                                         $doc_action = DB::table('dts_action_to_be_taken')->where('ID','!=','14')->where('STATUS',1)->orderBy('ID','ASC')->get();
                                     @endphp
 
-                                    <tr class='btn-panel-addresee add_receiver_rows_here'>
+                                    {{-- <tr class='btn-panel-addresee add_receiver_rows_here'>
                                         <td style="width:20%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Address To :</td>
                                         <td style="width:50%; padding: 0px;" colspan="4" id="ReceiverGroup1">
                                             <input type="hidden" name="send_type" value="FW">
@@ -49,33 +49,18 @@ $user_id = Auth::user()->id;
                                         <td style="width:6%; padding: 0; text-align: center;" colspan='2'>
                                             <button class='btn btn-default' type="button" id='btn-add-addresee' style="font-size: 12px; width: 100%; height: 33px; color: #09C;"><i class="fa fa-plus"></i></button>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
 
                                     @include('denr.dts.activity.script.jScriptAddressee')
 
-                                    {{-- VOUCHER NO --}}
-                                    <tr class='btn-panel-addresee add_receiver_rows_here' >
-                                        <td style="width:20%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> VOUCHER NO. :</td>
-                                        <td style="width:24%; padding: 0px;" colspan="6">
-                                            <input type="text" class="form-control" name='voucher_no' id='voucher_no' placeholder='Voucher No' style="height: 33px; float: left; width: 100%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Voucher No.">
-                                        </td>
-                                    </tr>
-
-                                    {{-- DV NO --}}
-                                    <tr class='btn-panel-addresee add_receiver_rows_here' >
-                                        <td style="width:20%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> DV NO. :</td>
-                                        <td style="width:24%; padding: 0px;" colspan="6">
-                                            <input type="text" class="form-control" name='dv_no' id='dv_no' placeholder='DV No' style="height: 33px; float: left; width: 100%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="DV No.">
-                                        </td>
-                                    </tr>
 
                                     {{-- ADA --}}
-                                    {{-- <tr class='btn-panel-addresee add_receiver_rows_here' >
+                                    <tr class='btn-panel-addresee add_receiver_rows_here' >
                                         <td style="width:20%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> ADA :</td>
-                                        <td style="width:24%; padding: 0px;" colspan="6">
+                                        <td style="width:80%; padding: 0px;" >
                                             <input type="text" class="form-control" name='ada' id='ada' placeholder='ADA' style="height: 33px; float: left; width: 100%; font-size: 12px; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="ADA">
                                         </td>
-                                    </tr> --}}
+                                    </tr>
 
                                     {{-- ATTACHMENT --}}
                                     <tr>
@@ -88,7 +73,7 @@ $user_id = Auth::user()->id;
                                         <td></td>
                                         <td colspan="6">
                                             <!-- <input type="submit" name="add" value="Send" class="btn btn-success btn-xs pull-left" style="height: 25px; width: 60px;" data-toggle="tooltip" data-placement="left"> -->
-                                            <button type="submit" name="add" id="btn_forward" class="btn btn-success btn-xs pull-left" data-toggle="tooltip" data-placement="left">Send</button>
+                                            <button type="submit" name="add" id="btn_paid" class="btn btn-success btn-xs pull-left" data-toggle="tooltip" data-placement="left">Complete</button>
                                         </td>
                                     </tr>
                                 </tbody>

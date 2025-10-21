@@ -32,7 +32,7 @@ $user_role = $user->user_role;
         <div class="panel panel-default" style="padding-top: 12px;">
             <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
                 <li @if($category == 'PENDING') class="active" @endif style="margin-left: 12px;">
-                    <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-file-o" aria-hidden="true"></i>  Vouchers</a>
                 </li>
                 <li @if($category == 'ACTED') class="active" @endif>
                     <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
@@ -48,7 +48,7 @@ $user_role = $user->user_role;
                 </li> --}}
                 @if($user_role != '4')
                 <li>
-                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Voucher</a>
                 </li>
                 @endif
             </ul>

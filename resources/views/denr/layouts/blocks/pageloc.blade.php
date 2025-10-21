@@ -5,7 +5,7 @@ $user = Auth::user();
 $path = helper::mod_path();
 $window_type = helper::window_type();
 
-if($path == 'dts') { $module = 'Document Tracking System'; }
+if($path == 'dts') { $module = 'Voucher Management System'; }
 else if($path == 'toa') { $module = 'Travel Order Application'; }
 else if($path == 'pis') { $module = 'Personal Information System'; }
 else if($path == 'app') { $module = 'Application Manager'; }

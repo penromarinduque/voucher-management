@@ -289,7 +289,7 @@ trait DocumentTrackingTrait
         $user_id = $user->id;
 
         $form = FormNoModel::where('id','=','4')->first();
-        $doc_action = DocActionModel::where('ID','!=','14')->where('ID','!=','35')->orderBy('ACTION','ASC')->get();
+        $doc_action = DocActionModel::where('ID','!=','14')->where('ID','!=','35')->where('STATUS', 1)->orderBy('ACTION','ASC')->get();
 
         $str = $form->form_no;
         $no = strlen($str);
@@ -712,10 +712,13 @@ trait DocumentTrackingTrait
         $doc_cat = $request->doc_category;
         $send_type = $request->send_type;
 
+        Log::info($request->all()   );
         $origins = DocLogsModel::where('DOC_NO', '=', $doc_no)
                 ->orderBy('FW_NO', 'DESC')
                 ->orderBy('ID', 'DESC')
                 ->firstOrFail();
+
+                Log::info($origins);
 
         // change this with specific doc logs of specified
         $forward = $doc_log_id ? DocLogsModel::find($doc_log_id) : DocLogsModel::where('DOC_NO', '=', $doc_no)
@@ -725,6 +728,7 @@ trait DocumentTrackingTrait
                 ->where('DOC_TO', $receiver)
                 ->orderBy('ID', 'DESC')
                 ->first();
+            
 
                 // return $receiver;
                 // return $request->all();
@@ -744,7 +748,6 @@ trait DocumentTrackingTrait
                 'REC_DATE_TIME' => $forwarder_seen,
                 'REL_DATE_TIME' => date('Y-m-d H:i:s'),
                 'DOC_REMARKS' => $request->input('doc_remarks')[$index],
-                'DOC_CATEGORY' => $doc_cat,
                 'ACTION_TO_BE_TAKEN' => $request->input('doc_action')[$index],
                 'SEEN' => 'N',
                 'SEND_TYPE' => $send_type,
@@ -761,7 +764,6 @@ trait DocumentTrackingTrait
         }
 
         if($request->hasFile('attached_files')){
-
             $FILE_ATTACHMENTS = $request->attached_files;
 
             foreach($FILE_ATTACHMENTS AS $FILE){
@@ -788,7 +790,24 @@ trait DocumentTrackingTrait
             }
         }
 
-        DocRecordModel::where('DOC_NO', '=', $doc_no)->update(['STATUS' => 'F']);
+        DocRecordModel::where('DOC_NO', $doc_no)->update([
+            'STATUS' => 'F'
+        ]);
+        if($forward->ACTION_TO_BE_TAKEN == 40){
+            DocRecordModel::where('DOC_NO', $doc_no)->update([
+                'VOUCHER_NO' => $request->input('voucher_no')
+            ]);
+        }
+        if($forward->ACTION_TO_BE_TAKEN == 41){
+            DocRecordModel::where('DOC_NO', $doc_no)->update([
+                'DV_NO' => $request->input('dv_no')
+            ]);
+        }
+        if($forward->ACTION_TO_BE_TAKEN == 41){
+            DocRecordModel::where('DOC_NO', $doc_no)->update([
+                'ADA' => $request->input('ada')
+            ]);
+        }
 
         Session::flash('success', 'Document ('.$doc_no.') successfully forwarded!');
         return back();
@@ -1439,6 +1458,54 @@ trait DocumentTrackingTrait
             return $e;
         }
         
+    }
+
+    public function toPaid(Request $request)
+    {
+        $user = Auth::user();
+        $com_id = $request->input('doc_no');
+        $remarks = $request->input('end_remarks');
+        $doc_log_id = $request->input('doc_log_id');
+        $date2day = date('Y-m-d');
+        $encode = Crypt::encrypt($com_id);
+
+        $forward = $doc_log_id ? DocLogsModel::find($doc_log_id) : DocLogsModel::where('DOC_NO', '=', $com_id)->where('DOC_TO', $user->id)->orderBy('FW_NO', 'DESC')->orderBy('ID', 'DESC')->first();
+        // $released = DocLogsModel::where('DOC_NO', '=', $com_id)->orderBy('ID', 'DESC')->orderBy('ID', 'DESC')->first();
+
+        $document_log = [
+            'FW_NO' => $forward->FW_NO + 1,
+            'DOC_FROM' => $forward->DOC_TO,
+            'DOC_TO' => $forward->DOC_TO,
+            'DOC_NO' => $com_id,
+            'DOC_DT_LOG' => date('Y-m-d H:i:s'),
+            'REC_DATE_TIME' => $forward->SEEN_DATE_TIME,
+            'REL_DATE_TIME' => date('Y-m-d H:i:s'),
+            'FOR_DATE_TIME' => date('Y-m-d H:i:s'),
+            'DOC_REMARKS' => $remarks,
+            'ACTION_TO_BE_TAKEN' => 14,
+            'ACTION_STATUS' => 1,
+            'SEEN' => 'Y',
+            'SEEN_DATE_TIME' => date('Y-m-d H:i:s'),
+            'SEND_TYPE' => 'FW',
+        ];
+
+        DocLogsModel::insert($document_log);
+
+        $doc_action = ['ACTION_STATUS' => 1];
+        DocLogsModel::where('ID','=', $forward->ID)->update($doc_action);
+
+        // CHECK IF ALL USER IS COMPLETE
+        $checker = DocLogsModel::where('DOC_NO', '=', $com_id)->where('ACTION_STATUS', 0)->count();
+
+        DocRecordModel::where('DOC_NO', '=', $com_id)->update([
+            'STATUS' => 'C', 
+            'COMPLETED_BY' => $user->id, 
+            'DATE_COMPLETED' => date('Y-m-d H:i:s'),
+            'ADA' => $request->input('ada')
+        ]);
+        Session::flash('success', ' Document ('.$com_id.') successfully ended.');
+        
+        return back();
     }
 
 }

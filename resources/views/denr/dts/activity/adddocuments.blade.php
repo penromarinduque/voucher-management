@@ -34,7 +34,7 @@ $user_role = $user->user_role;
                         <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                             <li style="margin-left: 12px;">
-                                <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
+                                <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-file-o" aria-hidden="true"></i>  Vouchers</a>
                             </li>
                             <li>
                                 <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
@@ -44,7 +44,7 @@ $user_role = $user->user_role;
                             </li>
                             
                             <li class="active">
-                                <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                                <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Voucher</a>
                             </li>
 
                         </ul>
@@ -153,7 +153,6 @@ $user_role = $user->user_role;
                                                         <input type="hidden" name="doc_time_org" value="{{date('H:i:s')}}">
                                                     </td>
                                                 </tr>
-
                                                 <tr>
                                                     <td style="font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "> Originating Office :</td>
                                                     <td style="padding: 0px;" colspan="3">

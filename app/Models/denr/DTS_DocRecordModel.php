@@ -8,6 +8,7 @@ use App\Models\denr\DTS_DocLogsModel;
 class DTS_DocRecordModel extends Model
 {
     protected $table= 'dts_document_record';
+    // protected $primaryKey = 'DOC_NO';
     /*protected $fillable = array(
     	'DOC_NO',
         'DOC_TYPE',

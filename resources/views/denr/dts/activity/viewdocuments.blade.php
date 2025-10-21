@@ -34,7 +34,7 @@ $user_role = $user->user_role;
             <ul class="nav nav-tabs" style="font-size: 11px; text-transform: uppercase;">
 
                 <li style="margin-left: 12px;">
-                    <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-sign-in fa-fw"></i> Documents</a>
+                    <a href="{{ route('dts.document.index', ['id' => 'pending']) }}"><i class="fa fa-file-o" aria-hidden="true"></i>  Vouchers</a>
                 </li>
                 <li>
                     <a href="{{ route('dts.document.index', ['id' => 'acted']) }}"><i class="fa fa-paper-plane fa-fw"></i> Acted</a>
@@ -53,15 +53,14 @@ $user_role = $user->user_role;
                 @if($user_role != '4')
                 
                 <li>
-                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Voucher</a>
                 </li>
 
                 @endif
 
                 <li class="active">
-                    <a href="{{ route('dts.document.view', ['id' => $id, 'id2' => 'B']) }}"><i class="fa fa-edit fa-fw"></i> View Document</a>
+                    <a href="{{ route('dts.document.view', ['id' => $id, 'id2' => 'B']) }}"><i class="fa fa-edit fa-fw"></i> View Voucher</a>
                 </li>
-
             </ul>
 
             <div class="panel-body">
@@ -82,9 +81,7 @@ $user_role = $user->user_role;
                             <table class="table table-striped table-bordered table-hover tooltip-demo">
                                 
                                 <tr>
-
                                     <td colspan="6" style="width:150px; font-weight:100; font-size: 11px; color: #5B5B5B; padding: 0px 0px 0px 10px; text-transform: uppercase;">
-                                        
                                         <font style="float: left; margin-top: 8px;"><i class="fa fa-pencil-square fa-fw"></i> DOCUMENT INFORMATION </font>
                                         
                                         <a onClick=MM_openBrWindow("{{ url('dts/activity/document/manual/'.$code) }}",'') class="btn-print btn btn-default" data-id="{{$documents->DOC_NO}}" data-toggle="tooltip" data-placement="top" title="Print Manual Slip" style="cursor:pointer; font-size: 12px; color: #FF4500; border-radius: 2px; width: 37px; float: right; margin-left: 2px;"><i class="glyphicon glyphicon-print"></i></a>
@@ -115,13 +112,13 @@ $user_role = $user->user_role;
                             <table class="table table-striped table-bordered table-hover tooltip-demo">
                                 
                                 <tr>
-                                    <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; "><font style="color: #F00;">*</font> DOC. CATEGORY :</td>
+                                    {{-- <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; "><font style="color: #F00;">*</font> DOC. CATEGORY :</td>
                                     <td style="width:35%; padding: 0px;">
                                         <select disabled class="form-control" name='doc_cat' id='doc_cat' style="background-color: #FFF; height: 33px; font-size: 12px; text-transform: uppercase; border-radius: 0px;" data-toggle="tooltip" data-placement="left" title="Documet Category">
                                             <option value="IN" @if($documents['DOC_CATEGORY'] == 'IN') selected @endif>Incoming Document</option>
                                             <option value="OUT" @if($documents['DOC_CATEGORY'] == 'OUT') selected @endif>Outgoing Document</option>
                                         </select>
-                                    </td>
+                                    </td> --}}
                                     <td style="width:15%; font-size: 11px; color: #5B5B5B; text-align: right; text-transform: uppercase; "><font style="color: #F00;">*</font> Document Type :</td>
                                     
                                     @php $doc_type_list = DB::table('dts_document_types')->get(); @endphp
@@ -470,7 +467,7 @@ $user_role = $user->user_role;
                                         </td>
                                     </tr>
 
-                                    @if($col->ACTION_STATUS == 0)
+                                    @if($col->ACTION_STATUS == 0 && $col->ACTION_TO_BE_TAKEN != 39)
                                         @php
                                             $now = date('m/d/Y H:i:s');
                                             $rcvd_dt = $col->REL_DATE_TIME;
@@ -519,13 +516,40 @@ $user_role = $user->user_role;
                                             <td rowspan="2" style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;"></td>
                                             <td rowspan="2" style="text-align:left;padding:2px 7px 2px 15px;vertical-align:middle;font-size:12px;"></td>
                                             <td rowspan="2" style="padding: 0px; text-align: center; vertical-align: middle;">
-                                                @if (!$col->ACTION_TO_BE_TAKEN == 39)
-                                                    @if($col->DOC_TO == $user->id && $history_logs->where("ACTION_TO_BE_TAKEN", "<>", 14)->where("DOC_TO", $user->id)->count() > 1)
-                                                        <a href="javascript:void(0)" class="btn-forward btn btn-default" data-id="{{$col->DOC_NO}}" data-id2="{{$col->DOC_CATEGORY}}" data-log-id="{{$col->ID}}"  data-toggle="tooltip" data-placement="top" title="FORWARD" style="font-size: 12px; color: #09C; border-radius: 2px;"><i class="fa fa-paper-plane"></i></a>
+                                                @if ($col->ACTION_TO_BE_TAKEN != 39)
+                                                    @if($col->DOC_TO == $user->id && $history_logs->where("ACTION_TO_BE_TAKEN", "<>", 14)->where("DOC_TO", $user->id)->count() >= 1)
+                                                        <a 
+                                                            href="javascript:void(0)" 
+                                                            class="btn-forward btn btn-default" 
+                                                            data-id="{{$col->DOC_NO}}" 
+                                                            data-id2="{{$col->DOC_CATEGORY}}" 
+                                                            data-log-id="{{$col->ID}}"  
+                                                            data-toggle="tooltip"
+                                                            data-action="{{$col->ACTION_TO_BE_TAKEN}}"
+                                                            data-placement="top" 
+                                                            title="FORWARD" 
+                                                            style="font-size: 12px; color: #09C; border-radius: 2px;">
+                                                            <i class="fa fa-paper-plane"></i>
+                                                        </a>
                                                         <a href="javascript:void(0)" class="btn-complete btn btn-default" data-id="{{$documents->DOC_NO}}" data-id2="{{$documents->DOC_CATEGORY}}" data-log-id="{{$col->ID}}" data-toggle="tooltip" data-placement="top" title="END" style="font-size: 12px; color: #00CD00; border-radius: 2px;"><i class="fa fa-check"></i></a>
                                                     @endif
+                                                    @if ($col->DOC_TO == $user->id && $history_logs->where("ACTION_TO_BE_TAKEN", 42)->where("DOC_TO", $user->id)->count() >= 1)
+                                                        <a 
+                                                            href="javascript:void(0)" 
+                                                            class="btn-paid btn btn-default" 
+                                                            data-id="{{$col->DOC_NO}}" 
+                                                            data-id2="{{$col->DOC_CATEGORY}}" 
+                                                            data-log-id="{{$col->ID}}"  
+                                                            data-toggle="tooltip"
+                                                            data-action="{{$col->ACTION_TO_BE_TAKEN}}"
+                                                            data-placement="top" 
+                                                            title="COMPLETE" 
+                                                            style="font-size: 12px; color: #09C; border-radius: 2px;">
+                                                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
                                                     @if ($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id)
-                                                    <a href="javascript:void(0)" class="btn-followup btn btn-default" data-log-id="{{$col->ID}}" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="FOLLOW UP" style="font-size: 12px; color: #e7b511; border-radius: 2px;"><i class="fa fa-bell"></i></a>
+                                                        <a href="javascript:void(0)" class="btn-followup btn btn-default" data-log-id="{{$col->ID}}" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="FOLLOW UP" style="font-size: 12px; color: #e7b511; border-radius: 2px;"><i class="fa fa-bell"></i></a>
                                                     @endif
                                                 @endif
                                                 
@@ -561,6 +585,7 @@ $user_role = $user->user_role;
 
 @include('denr.dts.activity.modal.attachmentModal')
 @include('denr.dts.activity.modal.forwardModal')
+@include('denr.dts.activity.modal.paidModal')
 @include('denr.dts.activity.modal.completeModal')
 @include('denr.dts.activity.modal.recallModal')
 @include('denr.dts.activity.modal.followupModal')
@@ -568,6 +593,7 @@ $user_role = $user->user_role;
 
 @include('denr.dts.activity.script.jScriptAttachment')
 @include('denr.dts.activity.script.jScriptForward')
+@include('denr.dts.activity.script.jScriptPaid')
 @include('denr.dts.activity.script.jScriptComplete')
 @include('denr.dts.activity.script.jScriptRecall')
 @include('denr.dts.activity.script.jScriptFollowup')

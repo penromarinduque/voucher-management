@@ -166,4 +166,8 @@ class DocumentTrackingController extends Controller
     {
         return $this->ajaxToRemoveAttachment($id);
     }
+
+    public function paid(Request $request){
+        return $this->toPaid($request);
+    }
 }

@@ -72,7 +72,7 @@
 
                             <li>
                                 <a href="{{ route('dts.document.index', ['id' => 'pending']) }}">
-                                    <i class="fa fa-sign-in fa-fw"></i> Documents 
+                                    <i class="fa fa-file-o" aria-hidden="true"></i> Vouchers 
                                     @if($in_notification > 0)
                                     <div style="width: 17px; height: 17px; background-color: #F00; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
                                         {{$in_notification}}
@@ -82,7 +82,7 @@
                             </li>
                             <li>
                                 <a href="{{ route('dts.document.index', ['id' => 'acted']) }}">
-                                    <i class="fa fa-sign-out fa-fw"></i> Acted Document
+                                    <i class="fa fa-paper-plane fa-fw"></i> Acted Vouchers
                                     @if($acted_notification > 0)
                                     <div style="width: 17px; height: 17px; background-color: #20C997; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
                                         {{$acted_notification}}
@@ -92,7 +92,7 @@
                             </li>
                             <li>
                                 <a href="{{ route('dts.document.index', ['id' => 'completed']) }}">
-                                    <i class="fa fa-sign-out fa-fw"></i> Completed Document
+                                    <i class="fa fa-check-square" aria-hidden="true"></i> Completed Vouchers
                                     @if($completed_notification > 0)
                                     <div style="width: 17px; height: 17px; background-color: #20C997; color: #FFF; border-radius: 50px; float: right; padding: 2px; font-size: 9px; text-align: center;">
                                         {{$completed_notification}}
@@ -107,7 +107,7 @@
                             
                             @if($user_role != '4')
                                 <li>
-                                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Document</a>
+                                    <a href="{{ route('dts.document.create') }}"><i class="fa fa-plus fa-fw"></i> New Voucher</a>
                                 </li>
                             @endif
 

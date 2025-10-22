@@ -669,7 +669,7 @@ trait DocumentTrackingTrait
                 'DV_NO' => $request->input('dv_no')
             ]);
         }
-        if($forward->ACTION_TO_BE_TAKEN == 41){
+        if($forward->ACTION_TO_BE_TAKEN == 42){
             DocRecordModel::where('DOC_NO', $doc_no)->update([
                 'ADA' => $request->input('ada')
             ]);
@@ -697,7 +697,6 @@ trait DocumentTrackingTrait
             'REL_DATE_TIME' => date('Y-m-d H:i:s'),
             'FOR_DATE_TIME' => date('Y-m-d H:i:s'),
             'DOC_REMARKS' => $remarks,
-            'DOC_CATEGORY' => $doc_cat,
             'ACTION_TO_BE_TAKEN' => 14,
             'ACTION_STATUS' => 1,
             'SEEN' => 'Y',
@@ -712,6 +711,11 @@ trait DocumentTrackingTrait
         if($checker == 0) {
             $complete = ['STATUS' => 'C', 'COMPLETED_BY' => $user->id, 'DATE_COMPLETED' => date('Y-m-d H:i:s')];
             DocRecordModel::where('DOC_NO', '=', $com_id)->update($complete);
+            $remarks = 'Ended Document '.$com_id;
+            $window_page = 'Document';
+            $module_code = 'DTS';
+            $window_type = 'ACT';
+            $action_type = 'APPROVE';
             $remarks = 'Ended Document '.$com_id;
             include(app_path() . '/Http/Traits/denr/app/audit_trail_log.php');       
         }
@@ -786,7 +790,6 @@ trait DocumentTrackingTrait
                     'REL_DATE_TIME' => $date,
                     'FOR_DATE_TIME' => $date,
                     'DOC_REMARKS' => $remarks,
-                    'DOC_CATEGORY' => $doc_cat,
                     'ACTION_TO_BE_TAKEN' => 38,
                     'ACTION_STATUS' => 1,
                     'SEEN' => 'Y',
@@ -810,7 +813,6 @@ trait DocumentTrackingTrait
                     'REC_DATE_TIME' => date('Y-m-d H:i:s'),
                     'REL_DATE_TIME' => date('Y-m-d H:i:s'),
                     'DOC_REMARKS' => $forward->DOC_REMARKS,
-                    'DOC_CATEGORY' => $forward->DOC_CATEGORY,
                     'ACTION_TO_BE_TAKEN' => $forward->ACTION_TO_BE_TAKEN,
                     'ACTION_STATUS' => 0,
                     'SEEN' => 'N',
@@ -848,7 +850,7 @@ trait DocumentTrackingTrait
                 'FOR_DATE_TIME' => date('Y-m-d H:i:s'),
                 'DOC_REMARKS' => $remarks,
                 'ACTION_TO_BE_TAKEN' => 35,
-                'ACTION_STATUS' => 1,
+                'ACTION_STATUS' => 0,
                 'SEEN' => 'Y',
                 'SEEN_DATE_TIME' => date('Y-m-d H:i:s'),
                 'SEND_TYPE' => 'FW',
@@ -1148,7 +1150,12 @@ trait DocumentTrackingTrait
         $user = Auth::user();
         $com_id = $request->input('com_id');
         $signed = ['SIGNED' => 'Y', 'SIGNED_BY' => $user->id, 'DATE_SIGNED' => date('Y-m-d H:i:s')];
-        DocRecordModel::where('DOC_NO', '=', $com_id)->update($signed);                          
+        DocRecordModel::where('DOC_NO', '=', $com_id)->update($signed);
+        $window_page = 'Document';
+        $module_code = 'DTS';
+        $window_type = 'ACT';
+        $action_type = 'APPROVE';
+        $remarks = 'Signed Document '.$com_id;                          
         include(app_path() . '/Http/Traits/denr/app/audit_trail_log.php');       
         Session::flash('success', ' Document ('.$com_id.') successfully Signed.');
         return back();

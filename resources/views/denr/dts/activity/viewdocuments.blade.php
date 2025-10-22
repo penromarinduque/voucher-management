@@ -458,7 +458,7 @@ $user_role = $user->user_role;
                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">@if($col->ACTION != 13){{$col->ACTION}}@endif</td>
                                         <td style="text-align:left;padding:4px 7px 4px 15px;vertical-align:middle;font-size:12px;">{{$col->DOC_REMARKS}}</td>
                                         <td style="padding: 0px; text-align: center; vertical-align: middle;">
-                                            @if (!$col->ACTION_TO_BE_TAKEN == 39)
+                                            @if ($col->ACTION_TO_BE_TAKEN != 39)
                                                 @if($col->ACTION_STATUS==0 && $col->DOC_FROM==$user->id && $col->ACTION_TO_BE_TAKEN!=35)
                                                 <a href="javascript:void(0)" class="btn-recall2 btn btn-default" data-id="{{$col->ID}}" data-id2="{{$col->DOC_NO}}" data-id3="{{$col->DOC_CATEGORY}}" data-id4="{{$col->to_fname}} {{$col->to_lname}}" data-toggle="tooltip" data-placement="top" title="RECALL" style="font-size: 12px; color: #a30000; border-radius: 2px;"><i class="fa fa-reply"></i></a>
                                                 @endif

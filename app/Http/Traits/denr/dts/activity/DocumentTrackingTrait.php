@@ -20,7 +20,9 @@ use App\Models\denr\DTS_DocActionModel as DocActionModel;
 
 use App\Models\denr\User as UserModel;
 use App\Models\denr\Form_No as FormNoModel;
+use App\Notifications\VoucherPaidNotification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 trait DocumentTrackingTrait
 {
@@ -1236,8 +1238,12 @@ trait DocumentTrackingTrait
             'DATE_COMPLETED' => date('Y-m-d H:i:s'),
             'ADA' => $request->input('ada')
         ]);
+        $record = DocRecordModel::where('DOC_NO', '=', $com_id)->first();
+        $docFrom = DocLogsModel::where('DOC_NO', $com_id)->pluck('DOC_FROM')->toArray();
+        $docTo   = DocLogsModel::where('DOC_NO', $com_id)->pluck('DOC_TO')->toArray();
+        $users = UserModel::whereIn('id', array_merge($docFrom, $docTo))->get();
+        Notification::send($users, new VoucherPaidNotification($record));
         Session::flash('success', ' Document ('.$com_id.') successfully ended.');
         return back();
     }
-
 }

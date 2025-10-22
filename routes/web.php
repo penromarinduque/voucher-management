@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Mail;
+
 Route::get('/', function () { return view('welcome'); })->name('welcome');
 
 Auth::routes();
@@ -65,3 +67,4 @@ Route::group(['middleware' => 'auth'],function() {
 	Route::post('/{path}/my_account/filtermyaudittraillog', 'denr\my_account\MyAuditTrailController@FilterMyAudit')->name('my.audit.trail.log.filter');
 
 });
+
